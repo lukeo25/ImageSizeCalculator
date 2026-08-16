@@ -58,7 +58,7 @@
 
   .button-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 24px;
   }
 
@@ -122,10 +122,17 @@
     line-height: 1.45;
   }
 
-  @media (max-width: 920px) {
-    .button-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+  .launch-button.luke-animate .icon {
+    width: 58px;
+    height: 58px;
+    display: block;
+  }
+
+  .launch-button.luke-animate .icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
   }
 
   @media (max-width: 680px) {
@@ -177,6 +184,14 @@
         <span class="button-title">WebP Fade Animator</span>
         <span class="button-description">
           Build a simple animated WebP with timed image fades and export it locally.
+        </span>
+      </a>
+
+      <a class="launch-button luke-animate" href="https://lukeo25.github.io/LukeAnimate/luke-tools-launcher.html">
+        <span class="icon" aria-hidden="true"><img src="https://raw.githubusercontent.com/lukeo25/LukeAnimate/main/LukeIcon.png" alt=""></span>
+        <span class="button-title">Luke Animate</span>
+        <span class="button-description">
+          Open Luke Animate for drawing, animation, clips, rigs and WebM export.
         </span>
       </a>
     </div>
