@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Print Size / Pixel Calculator</title>
+<style>
+  :root{
+    --bg:#12181c;
+    --panel:#1b2328;
+    --panel-2:#212b31;
+    --line:#2c383f;
+    --ink:#e8edf0;
+    --sub:#8ba0aa;
+    --accent:#4fd1a5;
+    --accent-dim:#2f6e5a;
+    --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:
+      linear-gradient(180deg, var(--bg), #0e1316 60%);
+    color:var(--ink);
+    font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    min-height:100vh;
+    padding:32px 16px 64px;
+  }
+  .wrap{max-width:900px;margin:0 auto;}
+  header{margin-bottom:28px;}
+  h1{
+    font-size:1.5rem;
+    margin:0 0 4px;
+    letter-spacing:0.02em;
+    display:flex;align-items:center;gap:10px;
+  }
+  h1 .tick{color:var(--accent);font-family:var(--mono);font-weight:400;}
+  header p{color:var(--sub);margin:0;font-size:0.92rem;}
+
+  .grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+  }
+  @media (max-width:720px){ .grid{grid-template-columns:1fr;} }
+
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:20px 22px 22px;
+    position:relative;
+    overflow:hidden;
+  }
+  .card::before{
+    content:"";
+    position:absolute; top:0; left:0; right:0; height:2px;
+    background:linear-gradient(90deg, var(--accent), transparent 70%);
+  }
+  .card h2{
+    font-size:0.78rem;
+    text-transform:uppercase;
+    letter-spacing:0.12em;
+    color:var(--accent);
+    margin:0 0 16px;
+    font-weight:600;
+  }
+
+  label{
+    display:block;
+    font-size:0.78rem;
+    color:var(--sub);
+    margin:14px 0 6px;
+  }
+  label:first-of-type{margin-top:0;}
+
+  .row{display:flex; gap:10px;}
+  .row > div{flex:1;}
+
+  input[type=number], select{
+    width:100%;
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    color:var(--ink);
+    border-radius:6px;
+    padding:10px 11px;
+    font-size:0.95rem;
+    font-family:var(--mono);
+    outline:none;
+    transition:border-color .15s;
+  }
+  input[type=number]:focus, select:focus{
+    border-color:var(--accent);
+  }
+  select{font-family:inherit;}
+
+  .result{
+    margin-top:20px;
+    background:var(--panel-2);
+    border:1px solid var(--accent-dim);
+    border-radius:8px;
+    padding:14px 16px;
+  }
+  .result .big{
+    font-family:var(--mono);
+    font-size:1.3rem;
+    color:var(--accent);
+    word-break:break-word;
+  }
+  .result .small{
+    color:var(--sub);
+    font-size:0.8rem;
+    margin-top:6px;
+  }
+
+  .note{
+    color:var(--sub);
+    font-size:0.75rem;
+    margin-top:10px;
+    line-height:1.5;
+  }
+
+  footer{
+    text-align:center;
+    color:var(--sub);
+    font-size:0.75rem;
+    margin-top:36px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1><span class="tick">▍</span>Print Size / Pixel Calculator</h1>
+    <p>Work out pixel dimensions from a target print size, or print size from pixel dimensions — at any DPI.</p>
+  </header>
+
+  <div class="grid">
+
+    <!-- CARD 1: Print size -> pixels -->
+    <div class="card">
+      <h2>Print Size → Pixels</h2>
+
+      <label for="p1-w">Width</label>
+      <div class="row">
+        <div><input type="number" id="p1-w" value="6" min="0" step="any"></div>
+        <div>
+          <select id="p1-unit">
+            <option value="in">inches</option>
+            <option value="cm">cm</option>
+            <option value="mm">mm</option>
+          </select>
+        </div>
+      </div>
+
+      <label for="p1-h">Height</label>
+      <input type="number" id="p1-h" value="4" min="0" step="any">
+
+      <label for="p1-dpi">DPI</label>
+      <input type="number" id="p1-dpi" value="300" min="1" step="any">
+
+      <div class="result">
+        <div class="big" id="p1-out">— × — px</div>
+        <div class="small" id="p1-out-mp"></div>
+      </div>
+    </div>
+
+    <!-- CARD 2: Pixels -> print size -->
+    <div class="card">
+      <h2>Pixels → Print Size</h2>
+
+      <label for="p2-w">Width (px)</label>
+      <input type="number" id="p2-w" value="1800" min="0" step="1">
+
+      <label for="p2-h">Height (px)</label>
+      <input type="number" id="p2-h" value="1200" min="0" step="1">
+
+      <label for="p2-dpi">DPI</label>
+      <input type="number" id="p2-dpi" value="300" min="1" step="any">
+
+      <div class="result">
+        <div class="big" id="p2-out">— × —</div>
+        <div class="small" id="p2-out-alt"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="note">
+    DPI (dots per inch) sets how many pixels are printed per inch of physical paper. 300 DPI is the standard target
+    for sharp photographic prints at normal viewing distance; large-format prints viewed from further away
+    (posters, banners) can use lower DPI (100–150) since individual pixels are less visible at distance.
+  </p>
+
+  <footer>Runs entirely in your browser — nothing is uploaded.</footer>
+</div>
+
+<script>
+function toInches(value, unit){
+  if(unit === 'in') return value;
+  if(unit === 'cm') return value / 2.54;
+  if(unit === 'mm') return value / 25.4;
+  return value;
+}
+
+function fmt(n, d=0){
+  return n.toLocaleString(undefined, {maximumFractionDigits:d});
+}
+
+// Card 1: size -> pixels
+function updateCard1(){
+  const w = parseFloat(document.getElementById('p1-w').value) || 0;
+  const h = parseFloat(document.getElementById('p1-h').value) || 0;
+  const unit = document.getElementById('p1-unit').value;
+  const dpi = parseFloat(document.getElementById('p1-dpi').value) || 0;
+
+  const wIn = toInches(w, unit);
+  const hIn = toInches(h, unit);
+
+  const pxW = Math.round(wIn * dpi);
+  const pxH = Math.round(hIn * dpi);
+
+  document.getElementById('p1-out').textContent = (dpi>0 && w>0 && h>0)
+    ? `${fmt(pxW)} × ${fmt(pxH)} px`
+    : '— × — px';
+
+  const mp = (pxW * pxH) / 1000000;
+  document.getElementById('p1-out-mp').textContent =
+    (dpi>0 && w>0 && h>0) ? `≈ ${fmt(mp,1)} megapixels required` : '';
+}
+
+// Card 2: pixels -> size
+function updateCard2(){
+  const pxW = parseFloat(document.getElementById('p2-w').value) || 0;
+  const pxH = parseFloat(document.getElementById('p2-h').value) || 0;
+  const dpi = parseFloat(document.getElementById('p2-dpi').value) || 0;
+
+  if(dpi > 0 && pxW > 0 && pxH > 0){
+    const wIn = pxW / dpi;
+    const hIn = pxH / dpi;
+    const wCm = wIn * 2.54;
+    const hCm = hIn * 2.54;
+
+    document.getElementById('p2-out').textContent =
+      `${fmt(wIn,2)}" × ${fmt(hIn,2)}"`;
+    document.getElementById('p2-out-alt').textContent =
+      `${fmt(wCm,1)} cm × ${fmt(hCm,1)} cm  (${fmt(wCm/10,1)} × ${fmt(hCm/10,1)} mm ×10)`;
+  } else {
+    document.getElementById('p2-out').textContent = '— × —';
+    document.getElementById('p2-out-alt').textContent = '';
+  }
+}
+
+['p1-w','p1-h','p1-unit','p1-dpi'].forEach(id=>
+  document.getElementById(id).addEventListener('input', updateCard1));
+['p2-w','p2-h','p2-dpi'].forEach(id=>
+  document.getElementById(id).addEventListener('input', updateCard2));
+
+updateCard1();
+updateCard2();
+</script>
+</body>
+</html>
