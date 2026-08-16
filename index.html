@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Luke's Tools</title>
+<link rel="icon" type="image/png" href="https://raw.githubusercontent.com/lukeo25/LukeAnimate/main/LukeIcon.png">
+<link rel="shortcut icon" type="image/png" href="https://raw.githubusercontent.com/lukeo25/LukeAnimate/main/LukeIcon.png">
+<link rel="apple-touch-icon" href="https://raw.githubusercontent.com/lukeo25/LukeAnimate/main/LukeIcon.png">
 <style>
   * {
     box-sizing: border-box;
@@ -30,6 +33,15 @@
   .launcher {
     width: min(900px, 100%);
     text-align: center;
+  }
+
+  .brand-icon {
+    width: 88px;
+    height: 88px;
+    display: block;
+    object-fit: contain;
+    margin: 0 auto 18px;
+    filter: drop-shadow(5px 5px 8px rgba(123, 132, 143, 0.28));
   }
 
   .title {
@@ -115,6 +127,12 @@
       padding: 22px;
     }
 
+    .brand-icon {
+      width: 72px;
+      height: 72px;
+      margin-bottom: 14px;
+    }
+
     .button-grid {
       grid-template-columns: 1fr;
     }
@@ -127,6 +145,7 @@
 </head>
 <body>
   <main class="launcher">
+    <img class="brand-icon" src="https://raw.githubusercontent.com/lukeo25/LukeAnimate/main/LukeIcon.png" alt="Luke Animate icon">
     <h1 class="title">Luke's Tools</h1>
     <p class="subtitle">Choose the application you want to launch.</p>
 
