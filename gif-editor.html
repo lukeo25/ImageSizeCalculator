@@ -1,34 +1,384 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>GIF Editor</title>
-<link rel="icon" href="https://raw.githubusercontent.com/lukeo25/LukeAnimate/main/LukeIcon.png">
+<link rel="icon" type="image/png" href="https://raw.githubusercontent.com/lukeo25/LukeAnimate/main/LukeIcon.png">
+<link rel="shortcut icon" type="image/png" href="https://raw.githubusercontent.com/lukeo25/LukeAnimate/main/LukeIcon.png">
+<link rel="apple-touch-icon" href="https://raw.githubusercontent.com/lukeo25/LukeAnimate/main/LukeIcon.png">
 <style>
-:root{--b:#e8ecf0;--t:#1a202c;--m:#667281;--a:#00a9c0;--sd:#c5ccd6;--sl:#fff}*{box-sizing:border-box}body{margin:0;background:var(--b);color:var(--t);font-family:Arial,sans-serif}.app{max-width:1450px;margin:auto;padding:30px}.top{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:26px}h1{margin:0 0 7px;font-size:42px}.sub{margin:0;color:var(--m);line-height:1.45}.back,.panel,button{background:var(--b);box-shadow:7px 7px 16px var(--sd),-7px -7px 16px var(--sl)}.back{padding:12px 18px;border-radius:16px;color:var(--t);text-decoration:none;font-weight:700}.grid{display:grid;grid-template-columns:370px 1fr;gap:24px}.panel{border-radius:22px;padding:20px}.controls{position:sticky;top:18px}.g{margin-bottom:20px}.g:last-child{margin:0}.gt{display:block;color:var(--a);font-weight:700;margin-bottom:9px}.drop{display:block;border:2px dashed #aeb8c4;border-radius:16px;padding:20px;text-align:center;cursor:pointer;box-shadow:inset 3px 3px 8px var(--sd),inset -3px -3px 8px var(--sl)}.small{font-size:12px;color:var(--m);line-height:1.4}.drop strong{display:block;margin-bottom:5px}input[type=file]{display:none}.fields{display:grid;grid-template-columns:1fr 1fr;gap:11px}.full{grid-column:1/-1}label{font-size:13px;color:var(--m);font-weight:600}input[type=number],input[type=text],select{width:100%;margin-top:5px;padding:10px;border:0;border-radius:12px;background:var(--b);box-shadow:inset 4px 4px 9px var(--sd),inset -4px -4px 9px var(--sl)}input[type=color]{width:100%;height:42px;margin-top:5px;border:0;background:var(--b)}input[type=range]{width:100%;accent-color:#00bcd4}button{border:0;border-radius:13px;padding:11px;font-weight:700;cursor:pointer}button:hover:not(:disabled){color:var(--a)}button:disabled{opacity:.45;cursor:not-allowed}.primary{background:linear-gradient(135deg,#00bcd4,#26c6da);color:white!important;box-shadow:0 6px 16px rgba(0,188,212,.3)}.danger{color:#c85252}.buttons{display:grid;gap:9px}.status{font-size:13px;color:var(--m);line-height:1.4;min-height:18px}.err{color:#c85252}.stage{min-height:430px;border-radius:18px;overflow:hidden;display:grid;place-items:center;background:linear-gradient(45deg,#d7dce2 25%,transparent 25%),linear-gradient(-45deg,#d7dce2 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#d7dce2 75%),linear-gradient(-45deg,transparent 75%,#d7dce2 75%);background-size:24px 24px;background-position:0 0,0 12px,12px -12px,-12px 0;box-shadow:inset 4px 4px 10px var(--sd),inset -4px -4px 10px var(--sl)}canvas{max-width:100%;max-height:70vh}.info{margin-top:16px;color:var(--m);font-size:13px}.result{display:none;margin-top:18px}.result img{max-width:100%;max-height:55vh;border-radius:12px;display:block;margin:10px 0}.row{display:flex;gap:8px;align-items:center}.row>*{flex:1}@media(max-width:900px){.app{padding:20px}.grid{grid-template-columns:1fr}.controls{position:static}.top{flex-direction:column}.back{align-self:stretch;text-align:center}}@media(max-width:520px){.fields{grid-template-columns:1fr}.full{grid-column:auto}}
+:root{--b:#e8ecf0;--t:#1a202c;--m:#667281;--a:#00a9c0;--sd:#c5ccd6;--sl:#fff}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;min-height:100%;font-family:Arial,Helvetica,sans-serif;background:var(--b);color:var(--t)}
+body{min-height:100vh}
+.app{max-width:1450px;margin:auto;padding:30px}
+.top{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:26px}
+h1{margin:0 0 7px;font-size:clamp(30px,4vw,44px)}
+.sub{margin:0;color:var(--m);line-height:1.45;max-width:900px}
+.back,.panel,button{background:var(--b);box-shadow:7px 7px 16px var(--sd),-7px -7px 16px var(--sl)}
+.back{padding:12px 18px;border-radius:16px;color:var(--t);text-decoration:none;font-weight:700;white-space:nowrap}
+.grid{display:grid;grid-template-columns:370px 1fr;gap:24px}
+.panel{border-radius:22px;padding:20px}
+.controls{position:sticky;top:18px}
+.g{margin-bottom:20px}.g:last-child{margin:0}
+.gt{display:block;color:var(--a);font-weight:700;margin-bottom:9px}
+.drop{display:block;border:2px dashed #aeb8c4;border-radius:16px;padding:20px;text-align:center;cursor:pointer;box-shadow:inset 3px 3px 8px var(--sd),inset -3px -3px 8px var(--sl)}
+.drop.dragover,.drop:hover{border-color:#00bcd4;color:var(--a)}
+.small{font-size:12px;color:var(--m);line-height:1.4}.drop strong{display:block;margin-bottom:5px}
+input[type=file]{display:none}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:11px}.full{grid-column:1/-1}
+label{font-size:13px;color:var(--m);font-weight:600}
+input[type=number],input[type=text],select{width:100%;margin-top:5px;padding:10px;border:0;border-radius:12px;background:var(--b);color:var(--t);box-shadow:inset 4px 4px 9px var(--sd),inset -4px -4px 9px var(--sl)}
+input[type=color]{width:100%;height:42px;margin-top:5px;border:0;background:var(--b)}
+input[type=range]{width:100%;accent-color:#00bcd4}
+button{border:0;border-radius:13px;padding:11px;font-weight:700;cursor:pointer}
+button:hover:not(:disabled){color:var(--a)}
+button:disabled{opacity:.45;cursor:not-allowed}
+.primary{background:linear-gradient(135deg,#00bcd4,#26c6da);color:white!important;box-shadow:0 6px 16px rgba(0,188,212,.3)}
+.danger{color:#c85252}
+.buttons{display:grid;gap:9px}
+.status{font-size:13px;color:var(--m);line-height:1.4;min-height:18px}.err{color:#c85252}
+progress{width:100%;height:14px;display:none;accent-color:#00bcd4}
+.stage{min-height:430px;border-radius:18px;overflow:hidden;display:grid;place-items:center;background:linear-gradient(45deg,#d7dce2 25%,transparent 25%),linear-gradient(-45deg,#d7dce2 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#d7dce2 75%),linear-gradient(-45deg,transparent 75%,#d7dce2 75%);background-color:#eef1f4;background-size:24px 24px;background-position:0 0,0 12px,12px -12px,-12px 0;box-shadow:inset 4px 4px 10px var(--sd),inset -4px -4px 10px var(--sl)}
+canvas{max-width:100%;max-height:70vh}
+.info{margin-top:16px;color:var(--m);font-size:13px;line-height:1.45}
+.result{display:none;margin-top:18px}.result img{max-width:100%;max-height:55vh;border-radius:12px;display:block;margin:10px 0}
+.badge{display:inline-block;margin-left:6px;padding:2px 7px;border-radius:999px;background:rgba(0,188,212,.1);color:var(--a);font-size:11px;font-weight:700}
+@media(max-width:900px){.app{padding:20px}.grid{grid-template-columns:1fr}.controls{position:static}.top{flex-direction:column}.back{align-self:stretch;text-align:center}}
+@media(max-width:520px){.fields{grid-template-columns:1fr}.full{grid-column:auto}}
 </style>
 </head>
-<body><div class="app">
-<div class="top"><div><h1>GIF Editor</h1><p class="sub">Load one animated GIF to resize, extend its background or crop it, then export a new GIF. Or load two or more still images to make a GIF.</p></div><a class="back" href="index.html">← Luke's Tools</a></div>
-<div class="grid"><aside class="panel controls">
-<div class="g"><span class="gt">1. Add GIF or images</span><label id="drop" class="drop" for="files"><strong>Choose files or drop them here</strong><span class="small">A real GIF is detected from its GIF87a/GIF89a file header, not just its extension.</span></label><input id="files" type="file" accept=".gif,.png,.jpg,.jpeg,.webp,.bmp,.avif,image/*" multiple></div>
-<div class="g"><span class="gt">2. Output</span><div class="fields"><label>Width<input id="w" type="number" min="1" max="4096" value="800"></label><label>Height<input id="h" type="number" min="1" max="4096" value="600"></label><label class="full">Fit<select id="fit"><option value="contain">Extend background — keep whole image</option><option value="cover">Crop to fill</option><option value="stretch">Stretch</option></select></label><label>Background<select id="bgmode"><option value="solid">Solid colour</option><option value="blur">Blurred image</option><option value="transparent">Transparent</option></select></label><label>Colour<input id="bg" type="color" value="#000000"></label><label>Palette<select id="pal"><option value="256">256 colours</option><option value="192">192 colours</option><option value="128">128 colours</option><option value="64">64 colours</option></select></label><label>Loop<select id="loop"><option value="0">Forever</option><option value="-1">Once</option><option value="1">Repeat once</option><option value="2">Repeat twice</option></select></label></div></div>
-<div class="g"><span class="gt">3. Crop position</span><label>Horizontal focus <span id="xv">50%</span><input id="x" type="range" min="0" max="100" value="50"></label><label>Vertical focus <span id="yv">50%</span><input id="y" type="range" min="0" max="100" value="50"></label><label>Blur <span id="bv">24px</span><input id="blur" type="range" min="0" max="60" value="24"></label></div>
-<div class="g"><span class="gt">4. Animation</span><div class="fields"><label id="stillLabel">Still frame ms<input id="delay" type="number" min="20" max="10000" value="500"></label><label id="speedLabel">GIF speed<select id="speed"><option value="50">50%</option><option value="75">75%</option><option value="100" selected>100%</option><option value="125">125%</option><option value="150">150%</option><option value="200">200%</option></select></label><label class="full">Filename<input id="name" type="text" value="edited-animation.gif"></label></div></div>
-<div class="g buttons"><button id="play" disabled>Play Preview</button><button id="stop" disabled>Stop Preview</button><button id="export" class="primary" disabled>Export GIF</button><button id="clear" class="danger" disabled>Clear</button><progress id="prog" max="100" value="0"></progress><div id="status" class="status">Load one GIF, or two or more still images.</div></div>
-</aside><main class="panel"><div class="stage"><canvas id="cv" width="800" height="600"></canvas></div><div id="info" class="info">Nothing loaded.</div><section id="result" class="result"><h2>Exported GIF</h2><img id="out" alt="GIF preview"><button id="download" class="primary">Download GIF</button><div id="stats" class="info"></div></section></main></div></div>
+<body>
+<div class="app">
+  <div class="top">
+    <div>
+      <h1>GIF Editor</h1>
+      <p class="sub">Load an animated GIF to resize it, extend its background or crop it, then export a new GIF. The importer also recognises animated WebP or AVIF files that may have been downloaded with a .gif filename.</p>
+    </div>
+    <a class="back" href="index.html">← Luke's Tools</a>
+  </div>
+
+  <div class="grid">
+    <aside class="panel controls">
+      <div class="g">
+        <span class="gt">1. Add GIF or images</span>
+        <label id="drop" class="drop" for="files">
+          <strong>Choose files or drop them here</strong>
+          <span class="small">File type is read from the file bytes first. GIF87a/GIF89a, WebP, AVIF, PNG, JPEG and BMP are recognised.</span>
+        </label>
+        <input id="files" type="file" accept=".gif,.png,.jpg,.jpeg,.webp,.bmp,.avif,image/*" multiple>
+      </div>
+
+      <div class="g">
+        <span class="gt">2. Output</span>
+        <div class="fields">
+          <label>Width<input id="w" type="number" min="1" max="4096" value="800"></label>
+          <label>Height<input id="h" type="number" min="1" max="4096" value="600"></label>
+          <label class="full">Fit<select id="fit"><option value="contain">Extend background — keep whole image</option><option value="cover">Crop to fill</option><option value="stretch">Stretch</option></select></label>
+          <label>Background<select id="bgmode"><option value="solid">Solid colour</option><option value="blur">Blurred image</option><option value="transparent">Transparent</option></select></label>
+          <label>Colour<input id="bg" type="color" value="#000000"></label>
+          <label>Palette<select id="pal"><option value="256">256 colours</option><option value="192">192 colours</option><option value="128">128 colours</option><option value="64">64 colours</option></select></label>
+          <label>Loop<select id="loop"><option value="0">Forever</option><option value="-1">Once</option><option value="1">Repeat once</option><option value="2">Repeat twice</option></select></label>
+        </div>
+      </div>
+
+      <div class="g">
+        <span class="gt">3. Crop position</span>
+        <label>Horizontal focus <span id="xv">50%</span><input id="x" type="range" min="0" max="100" value="50"></label>
+        <label>Vertical focus <span id="yv">50%</span><input id="y" type="range" min="0" max="100" value="50"></label>
+        <label>Blur <span id="bv">24px</span><input id="blur" type="range" min="0" max="60" value="24"></label>
+      </div>
+
+      <div class="g">
+        <span class="gt">4. Animation</span>
+        <div class="fields">
+          <label id="stillLabel">Still frame ms<input id="delay" type="number" min="20" max="10000" value="500"></label>
+          <label id="speedLabel">Animation speed<select id="speed"><option value="50">50%</option><option value="75">75%</option><option value="100" selected>100%</option><option value="125">125%</option><option value="150">150%</option><option value="200">200%</option></select></label>
+          <label class="full">Filename<input id="name" type="text" value="edited-animation.gif"></label>
+        </div>
+      </div>
+
+      <div class="g buttons">
+        <button id="play" disabled>Play Preview</button>
+        <button id="stop" disabled>Stop Preview</button>
+        <button id="export" class="primary" disabled>Export GIF</button>
+        <button id="clear" class="danger" disabled>Clear</button>
+        <progress id="prog" max="100" value="0"></progress>
+        <div id="status" class="status">Load one animation, or two or more still images.</div>
+      </div>
+    </aside>
+
+    <main class="panel">
+      <div class="stage"><canvas id="cv" width="800" height="600"></canvas></div>
+      <div id="info" class="info">Nothing loaded.</div>
+      <section id="result" class="result">
+        <h2>Exported GIF</h2>
+        <img id="out" alt="GIF preview">
+        <button id="download" class="primary">Download GIF</button>
+        <div id="stats" class="info"></div>
+      </section>
+    </main>
+  </div>
+</div>
+
 <script type="module">
-import{parseGIF,decompressFrames}from"https://esm.sh/gifuct-js@2.1.2";import{GIFEncoder,quantize,applyPalette}from"https://unpkg.com/gifenc@1.0.3";
-const $=id=>document.getElementById(id),files=$("files"),drop=$("drop"),cv=$("cv"),ctx=cv.getContext("2d"),w=$("w"),h=$("h"),fit=$("fit"),bgmode=$("bgmode"),bg=$("bg"),pal=$("pal"),loop=$("loop"),x=$("x"),y=$("y"),blur=$("blur"),xv=$("xv"),yv=$("yv"),bv=$("bv"),delay=$("delay"),speed=$("speed"),stillLabel=$("stillLabel"),speedLabel=$("speedLabel"),name=$("name"),play=$("play"),stop=$("stop"),exp=$("export"),clear=$("clear"),prog=$("prog"),status=$("status"),info=$("info"),result=$("result"),out=$("out"),download=$("download"),stats=$("stats");let mode="",frames=[],raf=0,start=0,url="",blob=null,busy=false;
-async function signature(f){try{return new TextDecoder("ascii").decode(await f.slice(0,6).arrayBuffer())}catch{return""}}async function isGif(f){const s=await signature(f);return s==="GIF87a"||s==="GIF89a"}
-function msg(t,e=false){status.textContent=t;status.className="status"+(e?" err":"")}function clamp(v,a,b){return Math.min(b,Math.max(a,v))}function ci(v,a,b,d){v=Math.round(Number(v));return Number.isFinite(v)?clamp(v,a,b):d}function resize(){cv.width=ci(w.value,1,4096,800);cv.height=ci(h.value,1,4096,600)}function values(){xv.textContent=x.value+"%";yv.textContent=y.value+"%";bv.textContent=blur.value+"px"}
-function contain(c,s,W,H,fx,fy){const k=Math.min(W/s.width,H/s.height),dw=s.width*k,dh=s.height*k;c.drawImage(s,(W-dw)*fx,(H-dh)*fy,dw,dh)}function cover(c,s,W,H,fx,fy,k2=1){const k=Math.max(W/s.width,H/s.height)*k2,dw=s.width*k,dh=s.height*k;c.drawImage(s,(W-dw)*fx,(H-dh)*fy,dw,dh)}
-function draw(src,c=ctx){resize();const W=c.canvas.width,H=c.canvas.height,fx=+x.value/100,fy=+y.value/100;c.save();c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,W,H);if(!src){c.restore();return}if(bgmode.value==="solid"){c.fillStyle=bg.value;c.fillRect(0,0,W,H)}else if(bgmode.value==="blur"){c.save();c.filter=`blur(${+blur.value}px)`;cover(c,src,W,H,.5,.5,1.1);c.restore()}if(fit.value==="stretch")c.drawImage(src,0,0,W,H);else if(fit.value==="cover")cover(c,src,W,H,fx,fy);else contain(c,src,W,H,fx,fy);c.restore()}
-function controls(){const ready=mode==="gif"?frames.length>0:frames.length>1;play.disabled=exp.disabled=!ready||busy;clear.disabled=!frames.length||busy;stillLabel.style.display=mode==="gif"?"none":"block";speedLabel.style.display=mode==="gif"?"block":"none";exp.textContent=mode==="gif"?"Export Edited GIF":"Create GIF";info.textContent=!frames.length?"Nothing loaded.":mode==="gif"?`${frames.length} GIF frames loaded. Original frame timing preserved at 100% speed.`:`${frames.length} still images loaded.`;if(frames[0])draw(frames[0].canvas)}
-function compose(parsed,raw){const W=parsed.lsd.width,H=parsed.lsd.height,base=document.createElement("canvas");base.width=W;base.height=H;const c=base.getContext("2d");let prev=null,restore=null;return raw.map((f,i)=>{if(prev){if(prev.disposalType===2)c.clearRect(prev.dims.left,prev.dims.top,prev.dims.width,prev.dims.height);else if(prev.disposalType===3&&restore)c.putImageData(restore,0,0)}const r=f.disposalType===3?c.getImageData(0,0,W,H):null,p=document.createElement("canvas");p.width=f.dims.width;p.height=f.dims.height;p.getContext("2d").putImageData(new ImageData(new Uint8ClampedArray(f.patch),f.dims.width,f.dims.height),0,0);c.drawImage(p,f.dims.left,f.dims.top);const full=document.createElement("canvas");full.width=W;full.height=H;full.getContext("2d").drawImage(base,0,0);prev=f;restore=r;return{canvas:full,ms:Math.max(20,Number(f.delay)||100)}})}
-async function load(list){if(!list.length)return;stopPreview();revoke();const flags=await Promise.all(list.map(isGif));if(flags.some(Boolean)&&!(list.length===1&&flags[0])){msg("Load one GIF by itself. GIF files are not sent to the still-image decoder.",true);return}frames=[];prog.style.display="block";try{if(list.length===1&&flags[0]){mode="gif";msg("Decoding GIF frames...");const buf=await list[0].arrayBuffer(),sig=new TextDecoder("ascii").decode(buf.slice(0,6));if(sig!=="GIF87a"&&sig!=="GIF89a")throw Error("Not a valid GIF file.");const parsed=parseGIF(buf),raw=decompressFrames(parsed,true);frames=compose(parsed,raw);w.value=parsed.lsd.width;h.value=parsed.lsd.height;name.value=(list[0].name||"animation.gif").replace(/\.gif$/i,"")+"-edited.gif";msg(`${frames.length} GIF frames loaded.`)}else{mode="stills";for(let i=0;i<list.length;i++){const f=list[i];if(await isGif(f))throw Error("A GIF was mixed with still images. Load it by itself.");const bm=await createImageBitmap(f),c=document.createElement("canvas");c.width=bm.width;c.height=bm.height;c.getContext("2d").drawImage(bm,0,0);bm.close();frames.push({canvas:c,ms:ci(delay.value,20,10000,500)});prog.value=Math.round((i+1)/list.length*100)}if(frames[0]){w.value=frames[0].canvas.width;h.value=frames[0].canvas.height}name.value="new-animation.gif";msg(frames.length>1?`${frames.length} still images loaded.`:"Add another still image to animate.")}controls()}catch(e){console.error(e);frames=[];mode="";controls();msg(e.message||"Could not load file.",true)}finally{prog.style.display="none"}}
-function stopPreview(){if(raf)cancelAnimationFrame(raf);raf=0;stop.disabled=true;controls()}function startPreview(){if(!frames.length)return;stopPreview();start=performance.now();play.disabled=true;stop.disabled=false;const sp=mode==="gif"?clamp(+speed.value/100,.25,4):1,t=frames.map(f=>Math.max(20,(mode==="gif"?f.ms/sp:+delay.value||500)));let total=t.reduce((a,b)=>a+b,0);const tick=n=>{let e=(n-start)%total,a=0,i=0;for(;i<t.length;i++){a+=t[i];if(e<a)break}draw(frames[Math.min(i,frames.length-1)].canvas);raf=requestAnimationFrame(tick)};raf=requestAnimationFrame(tick)}
-async function exportGif(){if(busy||!frames.length)return;stopPreview();revoke();busy=true;controls();prog.style.display="block";prog.value=0;try{const W=ci(w.value,1,4096,800),H=ci(h.value,1,4096,600),canvas=document.createElement("canvas");canvas.width=W;canvas.height=H;const c=canvas.getContext("2d"),enc=GIFEncoder(),sp=mode==="gif"?clamp(+speed.value/100,.25,4):1,max=ci(pal.value,2,256,256);for(let i=0;i<frames.length;i++){draw(frames[i].canvas,c);const rgba=c.getImageData(0,0,W,H).data,palette=quantize(rgba,max),idx=applyPalette(rgba,palette),ms=mode==="gif"?Math.max(20,Math.round(frames[i].ms/sp)):ci(delay.value,20,10000,500);enc.writeFrame(idx,W,H,{palette,delay:ms,repeat:ci(loop.value,-1,65535,0)});prog.value=Math.round((i+1)/frames.length*95);msg(`Encoding frame ${i+1} of ${frames.length}...`);if(i%2===0)await new Promise(r=>setTimeout(r,0))}enc.finish();blob=new Blob([enc.bytes()],{type:"image/gif"});url=URL.createObjectURL(blob);out.src=url;result.style.display="block";stats.textContent=`${W} × ${H} • ${frames.length} frames • ${(blob.size/1024).toFixed(1)} KB`;msg("GIF exported successfully.")}catch(e){console.error(e);msg(e.message||"Could not export GIF.",true)}finally{busy=false;prog.style.display="none";controls()}}
-function revoke(){if(url)URL.revokeObjectURL(url);url="";blob=null;result.style.display="none"}function clearAll(){stopPreview();frames=[];mode="";revoke();ctx.clearRect(0,0,cv.width,cv.height);controls();msg("Load one GIF, or two or more still images.")}function downloadGif(){if(!url)return;let n=(name.value||"edited-animation.gif").trim();if(!/\.gif$/i.test(n))n+=".gif";const a=document.createElement("a");a.href=url;a.download=n;a.click()}
-files.onchange=async e=>{await load([...e.target.files]);files.value=""};drop.ondragover=e=>{e.preventDefault();drop.classList.add("dragover")};drop.ondragleave=()=>drop.classList.remove("dragover");drop.ondrop=async e=>{e.preventDefault();drop.classList.remove("dragover");await load([...e.dataTransfer.files])};[w,h,fit,bgmode,bg,x,y,blur].forEach(el=>el.oninput=()=>{values();if(frames[0]&&!raf)draw(frames[0].canvas)});x.oninput=y.oninput=blur.oninput=()=>{values();if(frames[0]&&!raf)draw(frames[0].canvas)};play.onclick=startPreview;stop.onclick=stopPreview;exp.onclick=exportGif;clear.onclick=clearAll;download.onclick=downloadGif;values();controls();
-</script></body></html>
+import {parseGIF,decompressFrames} from "https://esm.sh/gifuct-js@2.1.2";
+import {GIFEncoder,quantize,applyPalette} from "https://unpkg.com/gifenc@1.0.3";
+
+const $=id=>document.getElementById(id);
+const files=$("files"),drop=$("drop"),cv=$("cv"),ctx=cv.getContext("2d"),w=$("w"),h=$("h"),fit=$("fit"),bgmode=$("bgmode"),bg=$("bg"),pal=$("pal"),loop=$("loop"),x=$("x"),y=$("y"),blur=$("blur"),xv=$("xv"),yv=$("yv"),bv=$("bv"),delay=$("delay"),speed=$("speed"),stillLabel=$("stillLabel"),speedLabel=$("speedLabel"),name=$("name"),play=$("play"),stop=$("stop"),exp=$("export"),clear=$("clear"),prog=$("prog"),status=$("status"),info=$("info"),result=$("result"),out=$("out"),download=$("download"),stats=$("stats");
+
+let mode="",sourceType="",frames=[],raf=0,start=0,url="",blob=null,busy=false;
+
+function ascii(bytes,start,len){let s="";for(let i=start;i<start+len&&i<bytes.length;i++)s+=String.fromCharCode(bytes[i]);return s}
+async function detectFileKind(file){
+  const bytes=new Uint8Array(await file.slice(0,128).arrayBuffer());
+  if(bytes.length>=6){
+    const sig=ascii(bytes,0,6);
+    if(sig==="GIF87a"||sig==="GIF89a")return{kind:"gif",mime:"image/gif",label:"GIF",bytes};
+  }
+  if(bytes.length>=12&&ascii(bytes,0,4)==="RIFF"&&ascii(bytes,8,4)==="WEBP")return{kind:"webp",mime:"image/webp",label:"WebP",bytes};
+  if(bytes.length>=8&&bytes[0]===0x89&&ascii(bytes,1,3)==="PNG")return{kind:"png",mime:"image/png",label:"PNG",bytes};
+  if(bytes.length>=3&&bytes[0]===0xff&&bytes[1]===0xd8&&bytes[2]===0xff)return{kind:"jpeg",mime:"image/jpeg",label:"JPEG",bytes};
+  if(bytes.length>=2&&ascii(bytes,0,2)==="BM")return{kind:"bmp",mime:"image/bmp",label:"BMP",bytes};
+  if(bytes.length>=12&&ascii(bytes,4,4)==="ftyp"){
+    const brands=ascii(bytes,8,Math.min(bytes.length-8,64));
+    if(brands.includes("avif")||brands.includes("avis"))return{kind:"avif",mime:"image/avif",label:"AVIF",bytes};
+  }
+  const ext=(file.name.split(".").pop()||"").toLowerCase();
+  return{kind:"unknown",mime:file.type||"",label:ext?ext.toUpperCase():"Unknown",bytes};
+}
+
+function msg(text,error=false){status.textContent=text;status.className="status"+(error?" err":"")}
+function clamp(v,a,b){return Math.min(b,Math.max(a,v))}
+function ci(v,a,b,d){v=Math.round(Number(v));return Number.isFinite(v)?clamp(v,a,b):d}
+function resizePreview(){cv.width=ci(w.value,1,4096,800);cv.height=ci(h.value,1,4096,600)}
+function values(){xv.textContent=x.value+"%";yv.textContent=y.value+"%";bv.textContent=blur.value+"px"}
+
+function contain(c,s,W,H,fx,fy){const k=Math.min(W/s.width,H/s.height),dw=s.width*k,dh=s.height*k;c.drawImage(s,(W-dw)*fx,(H-dh)*fy,dw,dh)}
+function cover(c,s,W,H,fx,fy,k2=1){const k=Math.max(W/s.width,H/s.height)*k2,dw=s.width*k,dh=s.height*k;c.drawImage(s,(W-dw)*fx,(H-dh)*fy,dw,dh)}
+function render(src,c=ctx){
+  if(c===ctx)resizePreview();
+  const W=c.canvas.width,H=c.canvas.height,fx=+x.value/100,fy=+y.value/100;
+  c.save();c.setTransform(1,0,0,1,0,0);c.globalAlpha=1;c.filter="none";c.clearRect(0,0,W,H);
+  if(!src){c.restore();return}
+  if(bgmode.value==="solid"){c.fillStyle=bg.value;c.fillRect(0,0,W,H)}
+  else if(bgmode.value==="blur"){c.save();c.filter=`blur(${+blur.value}px)`;cover(c,src,W,H,.5,.5,1.1);c.restore()}
+  if(fit.value==="stretch")c.drawImage(src,0,0,W,H);
+  else if(fit.value==="cover")cover(c,src,W,H,fx,fy);
+  else contain(c,src,W,H,fx,fy);
+  c.restore();
+}
+
+function controls(){
+  const isAnimation=mode==="animation",ready=isAnimation?frames.length>0:frames.length>1;
+  play.disabled=exp.disabled=!ready||busy;
+  clear.disabled=!frames.length||busy;
+  stillLabel.style.display=isAnimation?"none":"block";
+  speedLabel.style.display=isAnimation?"block":"none";
+  exp.textContent=isAnimation?"Export Edited GIF":"Create GIF";
+  info.innerHTML=!frames.length?"Nothing loaded.":isAnimation?`${frames.length} ${sourceType} frame${frames.length===1?"":"s"} loaded. Original timing preserved at 100% speed. <span class="badge">${sourceType}</span>`:`${frames.length} still images loaded.`;
+  if(frames[0])render(frames[0].canvas);
+}
+
+function composeGif(parsed,raw){
+  const W=parsed.lsd.width,H=parsed.lsd.height,base=document.createElement("canvas");
+  base.width=W;base.height=H;
+  const c=base.getContext("2d");
+  let prev=null,restore=null;
+  return raw.map(f=>{
+    if(prev){
+      if(prev.disposalType===2)c.clearRect(prev.dims.left,prev.dims.top,prev.dims.width,prev.dims.height);
+      else if(prev.disposalType===3&&restore)c.putImageData(restore,0,0);
+    }
+    const restoreForCurrent=f.disposalType===3?c.getImageData(0,0,W,H):null;
+    const patch=document.createElement("canvas");
+    patch.width=f.dims.width;patch.height=f.dims.height;
+    patch.getContext("2d").putImageData(new ImageData(new Uint8ClampedArray(f.patch),f.dims.width,f.dims.height),0,0);
+    c.drawImage(patch,f.dims.left,f.dims.top);
+    const full=document.createElement("canvas");
+    full.width=W;full.height=H;full.getContext("2d").drawImage(base,0,0);
+    prev=f;restore=restoreForCurrent;
+    return{canvas:full,ms:Math.max(20,Number(f.delay)||100)};
+  });
+}
+
+async function decodeGifFile(file){
+  const buf=await file.arrayBuffer();
+  const parsed=parseGIF(buf),raw=decompressFrames(parsed,true);
+  if(!raw.length)throw new Error("No GIF frames were found.");
+  return{frames:composeGif(parsed,raw),width:parsed.lsd.width,height:parsed.lsd.height,label:"GIF"};
+}
+
+async function decodeWithImageDecoder(file,mime,label){
+  if(!("ImageDecoder" in window))throw new Error(`${label} animation decoding is not available in this browser.`);
+  const data=await file.arrayBuffer();
+  let decoder;
+  try{
+    decoder=new ImageDecoder({data,type:mime,preferAnimation:true});
+    await decoder.tracks.ready;
+    const track=decoder.tracks.selectedTrack;
+    if(!track||!track.frameCount)throw new Error(`No ${label} frames were found.`);
+    const decoded=[];
+    for(let i=0;i<track.frameCount;i++){
+      const result=await decoder.decode({frameIndex:i,completeFramesOnly:true});
+      const frame=result.image;
+      const c=document.createElement("canvas");
+      c.width=frame.displayWidth||frame.codedWidth||1;
+      c.height=frame.displayHeight||frame.codedHeight||1;
+      c.getContext("2d").drawImage(frame,0,0,c.width,c.height);
+      const durationUs=Number(frame.duration);
+      decoded.push({canvas:c,ms:Math.max(20,Number.isFinite(durationUs)&&durationUs>0?Math.round(durationUs/1000):100)});
+      frame.close();
+      prog.value=Math.round(((i+1)/track.frameCount)*80)+10;
+      msg(`Decoding ${label} frame ${i+1} of ${track.frameCount}...`);
+      if(i%8===0)await new Promise(r=>setTimeout(r,0));
+    }
+    return{frames:decoded,width:decoded[0].canvas.width,height:decoded[0].canvas.height,label};
+  }finally{
+    if(decoder){try{decoder.close()}catch{}}
+  }
+}
+
+async function decodeStill(file,kind){
+  try{
+    const bm=await createImageBitmap(file);
+    const c=document.createElement("canvas");c.width=bm.width;c.height=bm.height;c.getContext("2d").drawImage(bm,0,0);bm.close();
+    return c;
+  }catch(firstError){
+    if("ImageDecoder" in window&&kind.mime){
+      try{
+        const data=await file.arrayBuffer(),decoder=new ImageDecoder({data,type:kind.mime});
+        const r=await decoder.decode({frameIndex:0});
+        const frame=r.image,c=document.createElement("canvas");
+        c.width=frame.displayWidth||frame.codedWidth||1;c.height=frame.displayHeight||frame.codedHeight||1;
+        c.getContext("2d").drawImage(frame,0,0,c.width,c.height);frame.close();decoder.close();
+        return c;
+      }catch{}
+    }
+    const objectUrl=URL.createObjectURL(file);
+    try{
+      const image=await new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>resolve(im);im.onerror=()=>reject(firstError);im.src=objectUrl});
+      const c=document.createElement("canvas");c.width=image.naturalWidth||image.width;c.height=image.naturalHeight||image.height;c.getContext("2d").drawImage(image,0,0);
+      return c;
+    }finally{URL.revokeObjectURL(objectUrl)}
+  }
+}
+
+function looksLikeAnimationCandidate(kind){return kind.kind==="gif"||kind.kind==="webp"||kind.kind==="avif"}
+
+async function load(list){
+  if(!list.length)return;
+  stopPreview();revoke();
+  frames=[];mode="";sourceType="";
+  prog.style.display="block";prog.value=3;
+  try{
+    const kinds=[];
+    for(let i=0;i<list.length;i++)kinds.push(await detectFileKind(list[i]));
+
+    if(list.length===1&&looksLikeAnimationCandidate(kinds[0])){
+      const file=list[0],kind=kinds[0];
+      mode="animation";sourceType=kind.label;
+      msg(`Detected ${kind.label}. Reading animation frames...`);
+      let decoded;
+      if(kind.kind==="gif")decoded=await decodeGifFile(file);
+      else decoded=await decodeWithImageDecoder(file,kind.mime,kind.label);
+      frames=decoded.frames;
+      w.value=decoded.width;h.value=decoded.height;
+      name.value=(file.name||"animation").replace(/\.[^.]+$/,"")+"-edited.gif";
+      msg(`${frames.length} ${decoded.label} frame${frames.length===1?"":"s"} loaded.`);
+      controls();prog.value=100;
+      return;
+    }
+
+    if(list.length===1&&/\.gif$/i.test(list[0].name||"")&&kinds[0].kind==="unknown"){
+      const hex=Array.from(kinds[0].bytes.slice(0,12)).map(v=>v.toString(16).padStart(2,"0")).join(" ");
+      throw new Error(`This file is named .gif but it does not contain a GIF87a/GIF89a header. First bytes: ${hex}. It may be a renamed download rather than a real GIF.`);
+    }
+
+    if(kinds.some(looksLikeAnimationCandidate)&&list.length>1){
+      throw new Error("Load animated GIF, WebP or AVIF files one at a time. Use multiple files only for still-image GIF creation.");
+    }
+
+    mode="stills";sourceType="Still images";
+    for(let i=0;i<list.length;i++){
+      const c=await decodeStill(list[i],kinds[i]);
+      frames.push({canvas:c,ms:ci(delay.value,20,10000,500)});
+      prog.value=Math.round(((i+1)/list.length)*90);
+      msg(`Loading image ${i+1} of ${list.length} (${kinds[i].label})...`);
+    }
+    if(frames[0]){w.value=frames[0].canvas.width;h.value=frames[0].canvas.height}
+    name.value="new-animation.gif";
+    msg(frames.length>1?`${frames.length} still images loaded.`:"Add another still image to animate.");
+    controls();prog.value=100;
+  }catch(e){
+    console.error(e);
+    frames=[];mode="";sourceType="";controls();
+    msg(e.message||"Could not load this file.",true);
+  }finally{
+    setTimeout(()=>prog.style.display="none",250);
+  }
+}
+
+function stopPreview(){if(raf)cancelAnimationFrame(raf);raf=0;stop.disabled=true;controls()}
+function startPreview(){
+  if(!frames.length)return;
+  stopPreview();start=performance.now();play.disabled=true;stop.disabled=false;
+  const sp=mode==="animation"?clamp(+speed.value/100,.25,4):1;
+  const timings=frames.map(f=>Math.max(20,mode==="animation"?f.ms/sp:+delay.value||500));
+  const total=timings.reduce((a,b)=>a+b,0);
+  const tick=now=>{
+    const elapsed=(now-start)%total;
+    let acc=0,index=0;
+    for(;index<timings.length;index++){acc+=timings[index];if(elapsed<acc)break}
+    render(frames[Math.min(index,frames.length-1)].canvas);
+    raf=requestAnimationFrame(tick);
+  };
+  raf=requestAnimationFrame(tick);
+}
+
+async function exportGif(){
+  if(busy||!frames.length)return;
+  stopPreview();revoke();busy=true;controls();prog.style.display="block";prog.value=0;
+  try{
+    const W=ci(w.value,1,4096,800),H=ci(h.value,1,4096,600);
+    const canvas=document.createElement("canvas");canvas.width=W;canvas.height=H;
+    const c=canvas.getContext("2d"),enc=GIFEncoder(),sp=mode==="animation"?clamp(+speed.value/100,.25,4):1,max=ci(pal.value,2,256,256);
+    for(let i=0;i<frames.length;i++){
+      render(frames[i].canvas,c);
+      const rgba=c.getImageData(0,0,W,H).data;
+      const palette=quantize(rgba,max);
+      const idx=applyPalette(rgba,palette);
+      const ms=mode==="animation"?Math.max(20,Math.round(frames[i].ms/sp)):ci(delay.value,20,10000,500);
+      enc.writeFrame(idx,W,H,{palette,delay:ms,repeat:ci(loop.value,-1,65535,0)});
+      prog.value=Math.round(((i+1)/frames.length)*95);
+      msg(`Encoding GIF frame ${i+1} of ${frames.length}...`);
+      if(i%2===0)await new Promise(r=>setTimeout(r,0));
+    }
+    enc.finish();
+    blob=new Blob([enc.bytes()],{type:"image/gif"});
+    url=URL.createObjectURL(blob);out.src=url;result.style.display="block";
+    stats.textContent=`${W} × ${H} • ${frames.length} frames • ${(blob.size/1024).toFixed(1)} KB`;
+    msg("GIF exported successfully.");prog.value=100;
+  }catch(e){
+    console.error(e);msg(e.message||"Could not export GIF.",true);
+  }finally{
+    busy=false;setTimeout(()=>prog.style.display="none",250);controls();
+  }
+}
+
+function revoke(){if(url)URL.revokeObjectURL(url);url="";blob=null;result.style.display="none"}
+function clearAll(){stopPreview();frames=[];mode="";sourceType="";revoke();ctx.clearRect(0,0,cv.width,cv.height);controls();msg("Load one animation, or two or more still images.")}
+function downloadGif(){if(!url)return;let n=(name.value||"edited-animation.gif").trim();if(!/\.gif$/i.test(n))n+=".gif";const a=document.createElement("a");a.href=url;a.download=n;document.body.appendChild(a);a.click();a.remove()}
+
+files.onchange=async e=>{await load([...e.target.files]);files.value=""};
+drop.ondragover=e=>{e.preventDefault();drop.classList.add("dragover")};
+drop.ondragleave=()=>drop.classList.remove("dragover");
+drop.ondrop=async e=>{e.preventDefault();drop.classList.remove("dragover");await load([...e.dataTransfer.files])};
+[w,h,fit,bgmode,bg,x,y,blur].forEach(el=>el.oninput=()=>{values();if(frames[0]&&!raf)render(frames[0].canvas)});
+play.onclick=startPreview;stop.onclick=stopPreview;exp.onclick=exportGif;clear.onclick=clearAll;download.onclick=downloadGif;
+values();controls();
+</script>
+</body>
+</html>
