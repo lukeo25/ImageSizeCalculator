@@ -31,7 +31,7 @@
   }
 
   .launcher {
-    width: min(1100px, 100%);
+    width: min(1180px, 100%);
     text-align: center;
   }
 
@@ -58,7 +58,7 @@
 
   .button-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 24px;
   }
 
@@ -135,6 +135,12 @@
     display: block;
   }
 
+  @media (max-width: 980px) {
+    .button-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
   @media (max-width: 680px) {
     body {
       padding: 22px;
@@ -166,33 +172,31 @@
       <a class="launch-button" href="print-size-calculator.html">
         <span class="icon" aria-hidden="true">🖼️</span>
         <span class="button-title">Print Size Calculator</span>
-        <span class="button-description">
-          Calculate image dimensions and suitable print sizes.
-        </span>
+        <span class="button-description">Calculate image dimensions and suitable print sizes.</span>
       </a>
 
       <a class="launch-button" href="3d-training-studio.html">
         <span class="icon" aria-hidden="true">🧊</span>
         <span class="button-title">3D Training Studio</span>
-        <span class="button-description">
-          Open Luke's 3D Training Studio animation and training tool.
-        </span>
+        <span class="button-description">Open Luke's 3D Training Studio animation and training tool.</span>
       </a>
 
       <a class="launch-button" href="webp-fade-animator.html">
         <span class="icon" aria-hidden="true">🎞️</span>
         <span class="button-title">WebP Fade Animator</span>
-        <span class="button-description">
-          Build a simple animated WebP with timed image fades and export it locally.
-        </span>
+        <span class="button-description">Build a simple animated WebP with timed image fades and export it locally.</span>
+      </a>
+
+      <a class="launch-button" href="gif-editor.html">
+        <span class="icon" aria-hidden="true">🎬</span>
+        <span class="button-title">GIF Editor</span>
+        <span class="button-description">Make GIFs, resize them, extend the background, crop and reposition animated GIFs, then export.</span>
       </a>
 
       <a class="launch-button luke-animate" href="https://lukeo25.github.io/LukeAnimate/luke-tools-launcher.html">
         <span class="icon" aria-hidden="true"><img src="https://raw.githubusercontent.com/lukeo25/LukeAnimate/main/LukeIcon.png" alt=""></span>
         <span class="button-title">Luke Animate</span>
-        <span class="button-description">
-          Open Luke Animate for drawing, animation, clips, rigs and WebM export.
-        </span>
+        <span class="button-description">Open Luke Animate for drawing, animation, clips, rigs and WebM export.</span>
       </a>
     </div>
   </main>
