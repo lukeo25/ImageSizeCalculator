@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luke's Tools</title>
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    margin: 0;
+    width: 100%;
+    min-height: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #e8ecf0;
+    color: #1a202c;
+  }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+  }
+
+  .launcher {
+    width: min(900px, 100%);
+    text-align: center;
+  }
+
+  .title {
+    margin: 0 0 8px;
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 700;
+  }
+
+  .subtitle {
+    margin: 0 0 34px;
+    color: #5a6675;
+    font-size: 16px;
+  }
+
+  .button-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  .launch-button {
+    min-height: 190px;
+    padding: 28px 24px;
+    border: 0;
+    border-radius: 22px;
+    background: #e8ecf0;
+    color: #1a202c;
+    box-shadow:
+      8px 8px 18px #c5ccd6,
+      -8px -8px 18px #ffffff;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    cursor: pointer;
+    transition:
+      transform 0.16s ease,
+      box-shadow 0.16s ease,
+      color 0.16s ease;
+  }
+
+  .launch-button:hover {
+    transform: translateY(-3px);
+    color: #00a9c0;
+    box-shadow:
+      11px 11px 22px #c1c8d2,
+      -11px -11px 22px #ffffff;
+  }
+
+  .launch-button:active {
+    transform: translateY(0);
+    box-shadow:
+      inset 5px 5px 12px #c5ccd6,
+      inset -5px -5px 12px #ffffff;
+  }
+
+  .launch-button:focus-visible {
+    outline: 3px solid #00bcd4;
+    outline-offset: 5px;
+  }
+
+  .icon {
+    font-size: 46px;
+    line-height: 1;
+  }
+
+  .button-title {
+    font-size: 21px;
+    font-weight: 700;
+  }
+
+  .button-description {
+    max-width: 290px;
+    color: #687585;
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  @media (max-width: 680px) {
+    body {
+      padding: 22px;
+    }
+
+    .button-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .launch-button {
+      min-height: 155px;
+    }
+  }
+</style>
+</head>
+<body>
+  <main class="launcher">
+    <h1 class="title">Luke's Tools</h1>
+    <p class="subtitle">Choose the application you want to launch.</p>
+
+    <div class="button-grid">
+      <a class="launch-button" href="print-size-calculator.html">
+        <span class="icon" aria-hidden="true">🖼️</span>
+        <span class="button-title">Print Size Calculator</span>
+        <span class="button-description">
+          Calculate image dimensions and suitable print sizes.
+        </span>
+      </a>
+
+      <a class="launch-button" href="Lukes_3D_Training_Studio_GPT_v82.html">
+        <span class="icon" aria-hidden="true">🧊</span>
+        <span class="button-title">3D Training Studio</span>
+        <span class="button-description">
+          Open Luke's 3D Training Studio animation and training tool.
+        </span>
+      </a>
+    </div>
+  </main>
+</body>
+</html>
