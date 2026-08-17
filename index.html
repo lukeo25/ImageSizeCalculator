@@ -8,12 +8,8 @@
 <link rel="shortcut icon" type="image/png" href="https://raw.githubusercontent.com/lukeo25/LukeAnimate/main/LukeIcon.png">
 <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/lukeo25/LukeAnimate/main/LukeIcon.png">
 <style>
-  * {
-    box-sizing: border-box;
-  }
-
-  html,
-  body {
+  * { box-sizing: border-box; }
+  html, body {
     margin: 0;
     width: 100%;
     min-height: 100%;
@@ -21,7 +17,6 @@
     background: #e8ecf0;
     color: #1a202c;
   }
-
   body {
     min-height: 100vh;
     display: flex;
@@ -29,12 +24,10 @@
     justify-content: center;
     padding: 32px;
   }
-
   .launcher {
     width: min(1180px, 100%);
     text-align: center;
   }
-
   .brand-icon {
     width: 88px;
     height: 88px;
@@ -43,25 +36,21 @@
     margin: 0 auto 18px;
     filter: drop-shadow(5px 5px 8px rgba(123, 132, 143, 0.28));
   }
-
   .title {
     margin: 0 0 8px;
     font-size: clamp(28px, 5vw, 48px);
     font-weight: 700;
   }
-
   .subtitle {
     margin: 0 0 34px;
     color: #5a6675;
     font-size: 16px;
   }
-
   .button-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 24px;
   }
-
   .launch-button {
     min-height: 190px;
     padding: 28px 24px;
@@ -69,9 +58,7 @@
     border-radius: 22px;
     background: #e8ecf0;
     color: #1a202c;
-    box-shadow:
-      8px 8px 18px #c5ccd6,
-      -8px -8px 18px #ffffff;
+    box-shadow: 8px 8px 18px #c5ccd6, -8px -8px 18px #ffffff;
     text-decoration: none;
     display: flex;
     flex-direction: column;
@@ -79,86 +66,54 @@
     justify-content: center;
     gap: 12px;
     cursor: pointer;
-    transition:
-      transform 0.16s ease,
-      box-shadow 0.16s ease,
-      color 0.16s ease;
+    transition: transform 0.16s ease, box-shadow 0.16s ease, color 0.16s ease;
   }
-
   .launch-button:hover {
     transform: translateY(-3px);
     color: #00a9c0;
-    box-shadow:
-      11px 11px 22px #c1c8d2,
-      -11px -11px 22px #ffffff;
+    box-shadow: 11px 11px 22px #c1c8d2, -11px -11px 22px #ffffff;
   }
-
   .launch-button:active {
     transform: translateY(0);
-    box-shadow:
-      inset 5px 5px 12px #c5ccd6,
-      inset -5px -5px 12px #ffffff;
+    box-shadow: inset 5px 5px 12px #c5ccd6, inset -5px -5px 12px #ffffff;
   }
-
   .launch-button:focus-visible {
     outline: 3px solid #00bcd4;
     outline-offset: 5px;
   }
-
   .icon {
     font-size: 46px;
     line-height: 1;
   }
-
   .button-title {
     font-size: 21px;
     font-weight: 700;
   }
-
   .button-description {
     max-width: 290px;
     color: #687585;
     font-size: 14px;
     line-height: 1.45;
   }
-
   .launch-button.luke-animate .icon {
     width: 58px;
     height: 58px;
     display: block;
   }
-
   .launch-button.luke-animate .icon img {
     width: 100%;
     height: 100%;
     object-fit: contain;
     display: block;
   }
-
   @media (max-width: 980px) {
-    .button-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+    .button-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
-
   @media (max-width: 680px) {
-    body {
-      padding: 22px;
-    }
-
-    .brand-icon {
-      width: 72px;
-      height: 72px;
-      margin-bottom: 14px;
-    }
-
-    .button-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .launch-button {
-      min-height: 155px;
-    }
+    body { padding: 22px; }
+    .brand-icon { width: 72px; height: 72px; margin-bottom: 14px; }
+    .button-grid { grid-template-columns: 1fr; }
+    .launch-button { min-height: 155px; }
   }
 </style>
 </head>
@@ -197,6 +152,12 @@
         <span class="icon" aria-hidden="true">✂️</span>
         <span class="button-title">Background Remover</span>
         <span class="button-description">Remove backgrounds from images and download a transparent PNG.</span>
+      </a>
+
+      <a class="launch-button" href="3d-font-animator.html">
+        <span class="icon" aria-hidden="true">🔤</span>
+        <span class="button-title">3D Font Animator</span>
+        <span class="button-description">Animate Google Fonts as extruded 3D text and export solid or experimental transparent WebM.</span>
       </a>
 
       <a class="launch-button luke-animate" href="https://lukeo25.github.io/LukeAnimate/luke-tools-launcher.html">
