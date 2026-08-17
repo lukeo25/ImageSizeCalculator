@@ -4,36 +4,743 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>3D Font Animator</title>
-<link rel="icon" href="https://raw.githubusercontent.com/lukeo25/LukeAnimate/main/LukeIcon.png">
+<link rel="icon" type="image/png" href="https://raw.githubusercontent.com/lukeo25/LukeAnimate/main/LukeIcon.png">
+<link rel="shortcut icon" type="image/png" href="https://raw.githubusercontent.com/lukeo25/LukeAnimate/main/LukeIcon.png">
+<link rel="apple-touch-icon" href="https://raw.githubusercontent.com/lukeo25/LukeAnimate/main/LukeIcon.png">
 <style>
-:root{--b:#e8ecf0;--t:#1a202c;--m:#667281;--a:#00a9c0;--c:#00bcd4;--d:#c85252;--sd:#c5ccd6;--sl:#fff}*{box-sizing:border-box}body{margin:0;background:var(--b);color:var(--t);font-family:Arial,sans-serif}.app{max-width:1520px;margin:auto;padding:30px}.top{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:26px}h1{margin:0 0 7px;font-size:42px}.sub{margin:0;color:var(--m);line-height:1.45;max-width:950px}.back,.panel,button{background:var(--b);box-shadow:7px 7px 16px var(--sd),-7px -7px 16px var(--sl)}.back{padding:12px 18px;border-radius:16px;color:var(--t);text-decoration:none;font-weight:700}.grid{display:grid;grid-template-columns:400px 1fr;gap:24px}.panel{border-radius:22px;padding:20px}.controls{position:sticky;top:18px}.g{margin-bottom:19px}.gt{display:block;color:var(--a);font-weight:700;margin-bottom:9px}.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}.full{grid-column:1/-1}label{font-size:13px;color:var(--m);font-weight:600}input[type=number],input[type=text],select,textarea{width:100%;margin-top:5px;padding:10px;border:0;border-radius:12px;background:var(--b);box-shadow:inset 4px 4px 9px var(--sd),inset -4px -4px 9px var(--sl);font:inherit}textarea{min-height:78px;resize:vertical}input[type=color]{width:100%;height:42px;margin-top:5px;border:0;background:var(--b);border-radius:12px;box-shadow:inset 4px 4px 9px var(--sd),inset -4px -4px 9px var(--sl)}input[type=range]{width:100%;accent-color:var(--c)}.sv{display:flex;justify-content:space-between}.check{display:flex;align-items:center;gap:8px;margin-top:10px}.check input{accent-color:var(--c)}button{border:0;border-radius:13px;padding:11px;font-weight:700;cursor:pointer}button:hover:not(:disabled){color:var(--a)}button:disabled{opacity:.45}.primary{background:linear-gradient(135deg,#00bcd4,#26c6da);color:#fff!important;box-shadow:0 6px 16px rgba(0,188,212,.3)}.danger{color:var(--d)}.buttons{display:grid;gap:9px}.note{margin-top:8px;padding:9px 11px;border-radius:11px;background:rgba(0,188,212,.08);font-size:12px;color:var(--m);line-height:1.4}.hidden{display:none!important}.status{font-size:13px;color:var(--m);line-height:1.4;min-height:18px}.err{color:var(--d)}progress{display:none;width:100%;accent-color:var(--c)}.stage{min-height:470px;border-radius:18px;overflow:hidden;display:grid;place-items:center;background:linear-gradient(45deg,#d7dce2 25%,transparent 25%),linear-gradient(-45deg,#d7dce2 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#d7dce2 75%),linear-gradient(-45deg,transparent 75%,#d7dce2 75%),#eef1f4;background-size:24px 24px;background-position:0 0,0 12px,12px -12px,-12px 0;box-shadow:inset 4px 4px 10px var(--sd),inset -4px -4px 10px var(--sl)}canvas{max-width:100%;max-height:72vh}.result{display:none;margin-top:18px}.result video{display:block;max-width:100%;max-height:55vh;border-radius:12px;background:#111}.info{margin-top:10px;font-size:13px;color:var(--m)}@media(max-width:900px){.grid{grid-template-columns:1fr}.controls{position:static}.top{flex-direction:column}.back{align-self:stretch;text-align:center}}@media(max-width:520px){.fields{grid-template-columns:1fr}.full{grid-column:auto}}
+:root{--b:#e8ecf0;--t:#1a202c;--m:#667281;--a:#00a9c0;--c:#00bcd4;--d:#c85252;--sd:#c5ccd6;--sl:#fff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--b);color:var(--t);font-family:Arial,sans-serif}
+.app{max-width:1600px;margin:auto;padding:30px}
+.top{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:26px}
+h1{margin:0 0 7px;font-size:42px}.sub{margin:0;color:var(--m);line-height:1.45;max-width:1020px}
+.back,.panel,button{background:var(--b);box-shadow:7px 7px 16px var(--sd),-7px -7px 16px var(--sl)}
+.back{padding:12px 18px;border-radius:16px;color:var(--t);text-decoration:none;font-weight:700}
+.grid{display:grid;grid-template-columns:430px 1fr;gap:24px}
+.panel{border-radius:22px;padding:20px}
+.controls{position:sticky;top:18px;max-height:calc(100vh - 36px);overflow:auto}
+.g{margin-bottom:19px}.gt{display:block;color:var(--a);font-weight:700;margin-bottom:9px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}.full{grid-column:1/-1}
+label{font-size:13px;color:var(--m);font-weight:600}
+input[type=number],input[type=text],select,textarea{width:100%;margin-top:5px;padding:10px;border:0;border-radius:12px;background:var(--b);box-shadow:inset 4px 4px 9px var(--sd),inset -4px -4px 9px var(--sl);font:inherit}
+textarea{min-height:84px;resize:vertical}
+input[type=color]{width:100%;height:42px;margin-top:5px;border:0;background:var(--b);border-radius:12px;box-shadow:inset 4px 4px 9px var(--sd),inset -4px -4px 9px var(--sl)}
+input[type=range]{width:100%;accent-color:var(--c)}
+.sv{display:flex;justify-content:space-between;gap:8px}.check{display:flex;align-items:center;gap:8px;margin-top:10px}.check input{accent-color:var(--c)}
+button{border:0;border-radius:13px;padding:11px;font-weight:700;cursor:pointer}button:hover:not(:disabled){color:var(--a)}button:disabled{opacity:.45}
+.primary{background:linear-gradient(135deg,#00bcd4,#26c6da);color:#fff!important;box-shadow:0 6px 16px rgba(0,188,212,.3)}
+.danger{color:var(--d)}.buttons{display:grid;gap:9px}
+.note{margin-top:8px;padding:9px 11px;border-radius:11px;background:rgba(0,188,212,.08);font-size:12px;color:var(--m);line-height:1.4}
+.hidden{display:none!important}.status{font-size:13px;color:var(--m);line-height:1.4;min-height:18px}.err{color:var(--d)}
+progress{display:none;width:100%;accent-color:var(--c)}
+.stage{min-height:500px;border-radius:18px;overflow:hidden;display:grid;place-items:center;background:linear-gradient(45deg,#d7dce2 25%,transparent 25%),linear-gradient(-45deg,#d7dce2 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#d7dce2 75%),linear-gradient(-45deg,transparent 75%,#d7dce2 75%),#eef1f4;background-size:24px 24px;background-position:0 0,0 12px,12px -12px,-12px 0;box-shadow:inset 4px 4px 10px var(--sd),inset -4px -4px 10px var(--sl)}
+#viewport{display:block;max-width:100%;max-height:74vh;border-radius:14px}
+.result{display:none;margin-top:18px}.result video{display:block;max-width:100%;max-height:55vh;border-radius:12px;background:#111}.info{margin-top:10px;font-size:13px;color:var(--m)}
+@media(max-width:980px){.grid{grid-template-columns:1fr}.controls{position:static;max-height:none}.top{flex-direction:column}.back{align-self:stretch;text-align:center}}
+@media(max-width:560px){.fields{grid-template-columns:1fr}.full{grid-column:auto}.app{padding:20px}}
 </style>
 </head>
 <body>
-<div class="app"><div class="top"><div><h1>3D Font Animator</h1><p class="sub">Animate Google Fonts as extruded 3D-style text, add bevel shading, preview the motion, and export WebM.</p></div><a class="back" href="index.html">← Luke's Tools</a></div>
-<div class="grid"><aside class="panel controls">
-<div class="g"><span class="gt">1. Text</span><div class="fields"><label class="full">Text<textarea id="txt">Luke's Tools</textarea></label><label>Google Font<select id="font"></select></label><label>Weight<select id="weight"><option>400</option><option>500</option><option>600</option><option selected>700</option><option>800</option><option>900</option></select></label><label>Align<select id="align"><option selected>center</option><option>left</option><option>right</option></select></label><label>Uppercase<select id="upper"><option value="0" selected>Off</option><option value="1">On</option></select></label></div></div>
-<div class="g"><span class="gt">2. Canvas</span><div class="fields"><label>Width<input id="w" type="number" min="320" max="3840" value="1280"></label><label>Height<input id="h" type="number" min="240" max="2160" value="720"></label><label>Background<select id="bgmode"><option value="solid" selected>Solid colour</option><option value="transparent">Transparent WebM</option></select></label><label>Colour<input id="bg" type="color" value="#10131a"></label><label>Face<input id="face" type="color" value="#f8f8f8"></label><label>Extrusion<input id="side" type="color" value="#0089a7"></label><label>Stroke<input id="stroke" type="color" value="#06131a"></label></div><div id="alphaNote" class="note hidden">Experimental transparency uses VP9 WebM. Some players show transparent pixels as black.</div></div>
-<div class="g"><span class="gt">3. 3D style</span><label><span class="sv"><span>Font size</span><b id="sizev"></b></span><input id="size" type="range" min="40" max="320" value="170"></label><label><span class="sv"><span>Depth</span><b id="depthv"></b></span><input id="depth" type="range" min="2" max="80" value="28"></label><label><span class="sv"><span>Perspective slant</span><b id="slantv"></b></span><input id="slant" type="range" min="-45" max="45" value="18"></label><label><span class="sv"><span>Stroke width</span><b id="swv"></b></span><input id="sw" type="range" min="0" max="12" value="3"></label><label><span class="sv"><span>Bevel size</span><b id="bevelv"></b></span><input id="bevel" type="range" min="0" max="40" value="12"></label><label><span class="sv"><span>Bevel strength</span><b id="bevstrv"></b></span><input id="bevstr" type="range" min="0" max="100" value="58"></label><label class="check"><input id="shadow" type="checkbox" checked>Show shadow</label><label class="check"><input id="bevelon" type="checkbox" checked>Enable bevel face shading</label></div>
-<div class="g"><span class="gt">4. Animation</span><div class="fields"><label>Type<select id="anim"><option value="orbit" selected>Orbit tilt</option><option value="spin">Spin</option><option value="bounce">Bounce</option><option value="pulse">Pulse</option><option value="wobble">Wobble</option><option value="drift">Drift</option></select></label><label>Duration sec<input id="dur" type="number" min="1" max="60" step=".1" value="5"></label><label>FPS<input id="fps" type="number" min="1" max="60" value="30"></label><label>Preview loops<input id="loops" type="number" min="0" max="999" value="0"></label></div><label><span class="sv"><span>Rotation</span><b id="rotv"></b></span><input id="rot" type="range" min="0" max="60" value="22"></label><label><span class="sv"><span>Lift</span><b id="liftv"></b></span><input id="lift" type="range" min="0" max="120" value="24"></label><label><span class="sv"><span>Zoom</span><b id="zoomv"></b></span><input id="zoom" type="range" min="0" max="35" value="8"></label></div>
-<div class="g"><span class="gt">5. Export</span><div class="fields"><label class="full">Filename<input id="name" type="text" value="3d-font-animation"></label></div><label><span class="sv"><span>WebM quality</span><b id="qv"></b></span><input id="quality" type="range" min="10" max="100" value="90"></label></div>
-<div class="g buttons"><button id="play">Play Preview</button><button id="stop" disabled>Stop Preview</button><button id="export" class="primary">Export WebM</button><button id="reset" class="danger">Reset Defaults</button><progress id="prog" max="100" value="0"></progress><div id="status" class="status">Ready.</div></div>
-</aside><main class="panel"><div class="stage"><canvas id="cv" width="1280" height="720"></canvas></div><section id="result" class="result"><h2>Exported WebM</h2><video id="video" controls loop playsinline></video><button id="download" class="primary" style="margin-top:10px">Download WebM</button><div id="stats" class="info"></div></section></main></div></div>
+<div class="app">
+  <div class="top">
+    <div>
+      <h1>3D Font Animator</h1>
+      <p class="sub">This is now the main version and uses a real WebGL 3D mesh with true extrusion. It also includes mouse orbit controls, material presets such as chrome, gold, plastic, neon, matte and ice, plus procedural environment reflections for better metallic surfaces.</p>
+    </div>
+    <a class="back" href="index.html">← Luke's Tools</a>
+  </div>
+
+  <div class="grid">
+    <aside class="panel controls">
+      <div class="g">
+        <span class="gt">1. Text</span>
+        <div class="fields">
+          <label class="full">Text<textarea id="txt">Luke's Tools</textarea></label>
+          <label>Google Font<select id="font"></select></label>
+          <label>Weight<select id="weight"><option value="400">400</option><option value="700" selected>700</option></select></label>
+          <label>Align<select id="align"><option value="center" selected>Center</option><option value="left">Left</option><option value="right">Right</option></select></label>
+          <label>Uppercase<select id="upper"><option value="0" selected>Off</option><option value="1">On</option></select></label>
+          <label>Line spacing<input id="linesp" type="number" min="0.6" max="2.4" step="0.01" value="1.08"></label>
+        </div>
+        <div class="note">When you change text, font or geometry settings, click <strong>Rebuild Text</strong>.</div>
+      </div>
+
+      <div class="g">
+        <span class="gt">2. Canvas and scene</span>
+        <div class="fields">
+          <label>Width<input id="w" type="number" min="320" max="3840" value="1280"></label>
+          <label>Height<input id="h" type="number" min="240" max="2160" value="720"></label>
+          <label>Background<select id="bgmode"><option value="solid" selected>Solid colour</option><option value="transparent">Transparent WebM</option></select></label>
+          <label>Colour<input id="bg" type="color" value="#10131a"></label>
+          <label>Camera FOV<input id="fov" type="number" min="20" max="90" step="1" value="38"></label>
+          <label>Camera distance<input id="camdist" type="number" min="0.8" max="8" step="0.1" value="2.8"></label>
+        </div>
+        <label class="check"><input id="orbitEnable" type="checkbox" checked>Enable mouse orbit controls</label>
+        <label class="check"><input id="orbitAutoRotate" type="checkbox">Auto rotate camera when not previewing</label>
+        <div id="alphaNote" class="note hidden">Transparent mode records the WebGL canvas with alpha. WebM transparency depends on browser VP9 support and playback support.</div>
+      </div>
+
+      <div class="g">
+        <span class="gt">3. True 3D geometry</span>
+        <label><span class="sv"><span>Font size</span><b id="sizev"></b></span><input id="size" type="range" min="20" max="260" value="120"></label>
+        <label><span class="sv"><span>Extrude depth</span><b id="depthv"></b></span><input id="depth" type="range" min="2" max="120" value="30"></label>
+        <label><span class="sv"><span>Curve detail</span><b id="curvev"></b></span><input id="curve" type="range" min="3" max="20" value="10"></label>
+        <label><span class="sv"><span>Bevel size</span><b id="bevelv"></b></span><input id="bevel" type="range" min="0" max="20" value="3"></label>
+        <label><span class="sv"><span>Bevel thickness</span><b id="bevthickv"></b></span><input id="bevthick" type="range" min="0" max="20" value="3"></label>
+        <label><span class="sv"><span>Bevel segments</span><b id="bevsegv"></b></span><input id="bevseg" type="range" min="0" max="10" value="4"></label>
+      </div>
+
+      <div class="g">
+        <span class="gt">4. Material presets</span>
+        <div class="fields">
+          <label class="full">Preset<select id="preset"><option value="custom">Custom</option><option value="chrome">Chrome</option><option value="gold">Gold</option><option value="plastic" selected>Plastic</option><option value="neon">Neon</option><option value="matte">Matte</option><option value="ice">Ice</option></select></label>
+          <label>Face colour<input id="face" type="color" value="#f8f8f8"></label>
+          <label>Side colour<input id="side" type="color" value="#00a5c7"></label>
+          <label>Emissive tint<input id="emissive" type="color" value="#002230"></label>
+          <label>Wire overlay<select id="wire"><option value="0" selected>Off</option><option value="1">On</option></select></label>
+        </div>
+        <label><span class="sv"><span>Metalness</span><b id="metalv"></b></span><input id="metal" type="range" min="0" max="1" step="0.01" value="0.18"></label>
+        <label><span class="sv"><span>Roughness</span><b id="roughv"></b></span><input id="rough" type="range" min="0" max="1" step="0.01" value="0.38"></label>
+      </div>
+
+      <div class="g">
+        <span class="gt">5. Environment reflections</span>
+        <label class="check"><input id="envEnable" type="checkbox" checked>Enable environment reflections</label>
+        <label><span class="sv"><span>Reflection intensity</span><b id="envintv"></b></span><input id="envIntensity" type="range" min="0" max="3" step="0.01" value="1.2"></label>
+        <div class="note">A procedural reflection map is added to improve chrome, gold and other glossy surfaces.</div>
+      </div>
+
+      <div class="g">
+        <span class="gt">6. Lighting</span>
+        <label><span class="sv"><span>Ambient light</span><b id="ambientv"></b></span><input id="ambient" type="range" min="0" max="3" step="0.01" value="1.1"></label>
+        <label><span class="sv"><span>Key light</span><b id="keyv"></b></span><input id="key" type="range" min="0" max="4" step="0.01" value="1.8"></label>
+        <label><span class="sv"><span>Rim light</span><b id="rimv"></b></span><input id="rim" type="range" min="0" max="4" step="0.01" value="1.3"></label>
+      </div>
+
+      <div class="g">
+        <span class="gt">7. Animation</span>
+        <div class="fields">
+          <label>Type<select id="anim"><option value="orbit" selected>Orbit tilt</option><option value="spin">Spin</option><option value="bounce">Bounce</option><option value="pulse">Pulse</option><option value="wobble">Wobble</option><option value="drift">Drift</option></select></label>
+          <label>Duration sec<input id="dur" type="number" min="1" max="60" step="0.1" value="5"></label>
+          <label>FPS<input id="fps" type="number" min="1" max="60" value="30"></label>
+          <label>Preview loops<input id="loops" type="number" min="0" max="999" value="0"></label>
+        </div>
+        <label><span class="sv"><span>Rotation amount</span><b id="rotv"></b></span><input id="rot" type="range" min="0" max="90" value="22"></label>
+        <label><span class="sv"><span>Lift amount</span><b id="liftv"></b></span><input id="lift" type="range" min="0" max="120" value="18"></label>
+        <label><span class="sv"><span>Zoom amount</span><b id="zoomv"></b></span><input id="zoom" type="range" min="0" max="50" value="8"></label>
+      </div>
+
+      <div class="g">
+        <span class="gt">8. Export</span>
+        <div class="fields">
+          <label class="full">Filename<input id="name" type="text" value="3d-font-animation"></label>
+        </div>
+        <label><span class="sv"><span>WebM quality</span><b id="qv"></b></span><input id="quality" type="range" min="10" max="100" value="90"></label>
+      </div>
+
+      <div class="g buttons">
+        <button id="build">Rebuild Text</button>
+        <button id="play">Play Preview</button>
+        <button id="stop" disabled>Stop Preview</button>
+        <button id="export" class="primary">Export WebM</button>
+        <button id="reset" class="danger">Reset Defaults</button>
+        <progress id="prog" max="100" value="0"></progress>
+        <div id="status" class="status">Ready.</div>
+      </div>
+    </aside>
+
+    <main class="panel">
+      <div class="stage"><canvas id="viewport"></canvas></div>
+      <section id="result" class="result">
+        <h2>Exported WebM</h2>
+        <video id="video" controls loop playsinline></video>
+        <button id="download" class="primary" style="margin-top:10px">Download WebM</button>
+        <div id="stats" class="info"></div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.165.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/opentype.js@1.3.4/dist/opentype.min.js"></script>
 <script>
-const F=['Roboto','Montserrat','Poppins','Oswald','Anton','Bebas Neue','Playfair Display','Bangers','Orbitron','Fredoka','Cinzel','Exo 2','Bungee'];
-const $=x=>document.getElementById(x),font=$('font'),txt=$('txt'),weight=$('weight'),align=$('align'),upper=$('upper'),w=$('w'),h=$('h'),bgmode=$('bgmode'),bg=$('bg'),face=$('face'),side=$('side'),stroke=$('stroke'),size=$('size'),depth=$('depth'),slant=$('slant'),sw=$('sw'),bevel=$('bevel'),bevstr=$('bevstr'),shadow=$('shadow'),bevelon=$('bevelon'),anim=$('anim'),dur=$('dur'),fps=$('fps'),loops=$('loops'),rot=$('rot'),lift=$('lift'),zoom=$('zoom'),name=$('name'),quality=$('quality'),alphaNote=$('alphaNote'),cv=$('cv'),cx=cv.getContext('2d',{alpha:true}),play=$('play'),stop=$('stop'),exp=$('export'),reset=$('reset'),prog=$('prog'),status=$('status'),result=$('result'),video=$('video'),download=$('download'),stats=$('stats');
-let raf=0,start=0,busy=false,outBlob=null,outUrl='';F.forEach(x=>font.add(new Option(x,x)));font.value='Bebas Neue';
-function cl(v,a,b){return Math.min(b,Math.max(a,v))}function ci(v,a,b,d){v=Math.round(+v);return Number.isFinite(v)?cl(v,a,b):d}function msg(t,e=false){status.textContent=t;status.className='status'+(e?' err':'')}function bytes(n){return n<1024?n+' B':n<1048576?(n/1024).toFixed(1)+' KB':(n/1048576).toFixed(2)+' MB'}function rgb(h){h=h.replace('#','');return{r:parseInt(h.slice(0,2),16),g:parseInt(h.slice(2,4),16),b:parseInt(h.slice(4,6),16)}}function hex(r,g,b){return'#'+[r,g,b].map(v=>cl(Math.round(v),0,255).toString(16).padStart(2,'0')).join('')}function tint(h,a){const c=rgb(h);return hex(c.r+(255-c.r)*a,c.g+(255-c.g)*a,c.b+(255-c.b)*a)}function shade(h,a){const c=rgb(h);return hex(c.r*(1-a),c.g*(1-a),c.b*(1-a))}function mix(a,b,t){const A=rgb(a),B=rgb(b);return hex(A.r+(B.r-A.r)*t,A.g+(B.g-A.g)*t,A.b+(B.b-A.b)*t)}
-function sync(){bg.disabled=bgmode.value==='transparent';alphaNote.classList.toggle('hidden',bgmode.value!=='transparent');$('sizev').textContent=size.value+' px';$('depthv').textContent=depth.value;$('slantv').textContent=slant.value+'°';$('swv').textContent=sw.value+' px';$('bevelv').textContent=bevel.value+' px';$('bevstrv').textContent=bevstr.value+'%';$('rotv').textContent=rot.value+'°';$('liftv').textContent=lift.value+' px';$('zoomv').textContent=zoom.value+'%';$('qv').textContent=quality.value+'%'}
-async function loadFont(){const id='gf-'+font.value.replace(/\W/g,'-')+'-'+weight.value;if(!document.getElementById(id)){const l=document.createElement('link');l.id=id;l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family='+font.value.replace(/ /g,'+')+':wght@400;500;600;700;800;900&display=swap';document.head.appendChild(l)}try{await document.fonts.load(weight.value+' 80px "'+font.value+'"');await document.fonts.ready}catch{}}
-function resize(){cv.width=ci(w.value,320,3840,1280);cv.height=ci(h.value,240,2160,720)}
-function state(p){const r=+rot.value*Math.PI/180,L=+lift.value,z=+zoom.value/100,s=Math.sin(p*Math.PI*2),c=Math.cos(p*Math.PI*2);let ax=0,ay=0,y=0,x=0,sc=1;if(anim.value==='orbit'){ay=s*r;ax=c*r*.45;y=s*L*.3;sc=1+s*z*.2}else if(anim.value==='spin'){ay=p*Math.PI*2;ax=Math.sin(p*Math.PI*4)*r*.12}else if(anim.value==='bounce'){y=Math.abs(s)*L;ay=s*r*.3;sc=1+Math.abs(s)*z*.15}else if(anim.value==='pulse'){sc=1+s*z;ay=s*r*.15}else if(anim.value==='wobble'){ay=Math.sin(p*Math.PI*4)*r;ax=Math.cos(p*Math.PI*3)*r*.25;y=Math.sin(p*Math.PI*4)*L*.2}else{x=s*L*.8;y=c*L*.3;ay=s*r*.2;sc=1+s*z*.15}return{ax,ay,x,y,sc}}
-function drawText(layout,sy,lh,strokeOnly=false){layout.forEach((o,i)=>strokeOnly?cx.strokeText(o.line,o.x,sy+i*lh):cx.fillText(o.line,o.x,sy+i*lh))}
-function bevelFace(layout,sy,lh,sx){const fs=+size.value,b=+bevel.value/Math.max(.2,sx),str=+bevstr.value/100,strokeW=+sw.value/Math.max(.2,sx);cx.save();if(bevelon.checked&&b>0&&str>0){cx.save();cx.globalAlpha=.14+.14*str;cx.fillStyle=tint(face.value,.5);cx.translate(-b*.12,-b*.12);drawText(layout,sy,lh);cx.restore();cx.save();cx.globalAlpha=.12+.16*str;cx.fillStyle=shade(face.value,.5);cx.translate(b*.14,b*.14);drawText(layout,sy,lh);cx.restore()}const g=cx.createLinearGradient(0,sy-fs,0,sy+(layout.length-1)*lh+fs);g.addColorStop(0,tint(face.value,.28*str+.08));g.addColorStop(.4,tint(face.value,.1*str));g.addColorStop(.6,face.value);g.addColorStop(1,shade(face.value,.22*str+.06));cx.globalAlpha=1;cx.fillStyle=g;drawText(layout,sy,lh);if(bevelon.checked&&b>0&&str>0){cx.save();cx.globalAlpha=.12+.18*str;cx.strokeStyle='#fff';cx.lineWidth=Math.max(1,b*.12);cx.translate(-b*.04,-b*.04);drawText(layout,sy,lh,true);cx.restore();cx.save();cx.globalAlpha=.1+.16*str;cx.strokeStyle='#000';cx.lineWidth=Math.max(1,b*.14);cx.translate(b*.05,b*.05);drawText(layout,sy,lh,true);cx.restore()}if(+sw.value){cx.globalAlpha=1;cx.strokeStyle=stroke.value;cx.lineWidth=strokeW;drawText(layout,sy,lh,true)}cx.restore()}
-function render(ms){const D=Math.max(100,(+dur.value||5)*1000),p=((ms%D)/D+1)%1,S=state(p),fs=+size.value,dep=+depth.value,sl=+slant.value*Math.PI/180,lines=(upper.value==='1'?txt.value.toUpperCase():txt.value).replace(/\r/g,'').split('\n');cx.setTransform(1,0,0,1,0,0);cx.clearRect(0,0,cv.width,cv.height);if(bgmode.value!=='transparent'){cx.fillStyle=bg.value;cx.fillRect(0,0,cv.width,cv.height)}cx.save();cx.translate(cv.width/2+S.x,cv.height/2-S.y);cx.scale(S.sc,S.sc);const sx=Math.max(.18,Math.abs(Math.cos(S.ay))),sk=Math.sin(S.ay)*Math.tan(sl)*.7,ex=Math.cos(S.ay-sl)*dep,ey=Math.sin(S.ax+sl*.3)*dep*.9;cx.transform(1,0,sk,1,0,0);cx.scale(sx,1);cx.font=weight.value+' '+fs+'px "'+font.value+'",sans-serif';cx.textBaseline='middle';cx.lineJoin='round';const lh=fs*1.12,sy=-(lines.length-1)*lh/2,layout=lines.map(line=>{const m=cx.measureText(line).width;return{line,x:align.value==='center'?-m/2:align.value==='left'?-cv.width*.34:cv.width*.34-m}});if(shadow.checked){cx.save();cx.fillStyle='rgba(0,0,0,.25)';cx.shadowColor='rgba(0,0,0,.25)';cx.shadowBlur=20;layout.forEach((o,i)=>cx.fillText(o.line,o.x+18,sy+i*lh+18));cx.restore()}for(let j=Math.max(2,Math.round(dep));j>=1;j--){const t=j/Math.max(2,Math.round(dep));cx.fillStyle=mix(side.value,face.value,t*.18);cx.strokeStyle=shade(stroke.value,.08);cx.lineWidth=+sw.value/Math.max(.2,sx);layout.forEach((o,i)=>{const xx=o.x+ex*t,yy=sy+i*lh+ey*t;cx.fillText(o.line,xx,yy);if(+sw.value)cx.strokeText(o.line,xx,yy)})}bevelFace(layout,sy,lh,sx);cx.restore()}
-async function still(){sync();resize();await loadFont();render(0)}function stopPlay(){if(raf)cancelAnimationFrame(raf);raf=0;stop.disabled=true;play.disabled=false}async function preview(){stopPlay();revoke();sync();resize();await loadFont();start=performance.now();play.disabled=true;stop.disabled=false;const D=Math.max(100,(+dur.value||5)*1000),lim=ci(loops.value,0,999,0);const tick=n=>{const e=n-start;if(lim&&Math.floor(e/D)>=lim){stopPlay();render(0);return}render(e);raf=requestAnimationFrame(tick)};raf=requestAnimationFrame(tick)}
-function mime(alpha){if(!window.MediaRecorder)return'';const a=alpha?['video/webm;codecs=vp9']:['video/webm;codecs=vp9','video/webm;codecs=vp8','video/webm'];return a.find(x=>MediaRecorder.isTypeSupported(x))||''}
-async function exportWebM(){if(busy)return;stopPlay();revoke();sync();resize();await loadFont();const alpha=bgmode.value==='transparent',type=mime(alpha);if(!type){msg(alpha?'Transparent WebM requires VP9 MediaRecorder support.':'WebM recording is not supported in this browser.',true);return}busy=true;[play,exp,reset].forEach(b=>b.disabled=true);prog.style.display='block';prog.value=0;try{const rate=ci(fps.value,1,60,30),seconds=Math.max(1,+dur.value||5),total=Math.max(1,Math.round(rate*seconds)),fd=1000/rate,stream=cv.captureStream(rate),q=cl(+quality.value/100,.1,1),br=Math.round(Math.max(1500000,Math.min(32000000,cv.width*cv.height*rate*.08*q))),chunks=[],rec=new MediaRecorder(stream,{mimeType:type,videoBitsPerSecond:br}),done=new Promise((res,rej)=>{rec.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};rec.onerror=e=>rej(e.error||new Error('Recorder error'));rec.onstop=res});rec.start();for(let i=0;i<total;i++){render(i*fd);prog.value=Math.round((i+1)/total*95);msg('Recording frame '+(i+1)+' of '+total+'...');await new Promise(r=>setTimeout(r,fd))}rec.stop();await done;stream.getTracks().forEach(t=>t.stop());outBlob=new Blob(chunks,{type});outUrl=URL.createObjectURL(outBlob);video.src=outUrl;video.load();result.style.display='block';stats.textContent=cv.width+' × '+cv.height+' • '+rate+' fps • '+seconds.toFixed(2)+' sec • '+bytes(outBlob.size)+(alpha?' • transparent alpha attempt':'');prog.value=100;msg('WebM exported successfully.')}catch(e){console.error(e);msg(e.message||'Export failed.',true)}finally{busy=false;[play,exp,reset].forEach(b=>b.disabled=false);setTimeout(()=>prog.style.display='none',400)}}
-function revoke(){if(outUrl)URL.revokeObjectURL(outUrl);outUrl='';outBlob=null;video.pause();video.removeAttribute('src');result.style.display='none'}function dl(){if(!outUrl)return;const a=document.createElement('a');a.href=outUrl;a.download=(name.value||'3d-font-animation').replace(/\.webm$/i,'')+'.webm';a.click()}function defaults(){txt.value="Luke's Tools";font.value='Bebas Neue';weight.value='700';align.value='center';upper.value='0';w.value=1280;h.value=720;bgmode.value='solid';bg.value='#10131a';face.value='#f8f8f8';side.value='#0089a7';stroke.value='#06131a';size.value=170;depth.value=28;slant.value=18;sw.value=3;bevel.value=12;bevstr.value=58;shadow.checked=true;bevelon.checked=true;anim.value='orbit';dur.value=5;fps.value=30;loops.value=0;rot.value=22;lift.value=24;zoom.value=8;quality.value=90;name.value='3d-font-animation';revoke();still();msg('Defaults restored.')}
-[txt,font,weight,align,upper,w,h,bgmode,bg,face,side,stroke,size,depth,slant,sw,bevel,bevstr,shadow,bevelon,anim,dur,fps,loops,rot,lift,zoom,quality].forEach(el=>{el.addEventListener('input',still);el.addEventListener('change',still)});play.onclick=preview;stop.onclick=()=>{stopPlay();still()};exp.onclick=exportWebM;reset.onclick=defaults;download.onclick=dl;window.addEventListener('beforeunload',revoke);sync();still();
-</script></body></html>
+const FONT_LIBRARY = {
+  'Anton': {400:'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/anton/Anton-Regular.ttf'},
+  'Bangers': {400:'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/bangers/Bangers-Regular.ttf'},
+  'Bebas Neue': {400:'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/bebasneue/BebasNeue-Regular.ttf'},
+  'Cinzel': {400:'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/cinzel/Cinzel-Regular.ttf',700:'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/cinzel/Cinzel-Bold.ttf'},
+  'Fredoka': {400:'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/fredoka/Fredoka-Regular.ttf',700:'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/fredoka/Fredoka-SemiBold.ttf'},
+  'Montserrat': {400:'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/montserrat/Montserrat-Regular.ttf',700:'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/montserrat/Montserrat-Bold.ttf'},
+  'Orbitron': {400:'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/orbitron/Orbitron-Regular.ttf',700:'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/orbitron/Orbitron-Bold.ttf'},
+  'Oswald': {400:'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/oswald/Oswald-Regular.ttf',700:'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/oswald/Oswald-Bold.ttf'},
+  'Poppins': {400:'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/poppins/Poppins-Regular.ttf',700:'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/poppins/Poppins-Bold.ttf'}
+};
+
+const MATERIAL_PRESETS = {
+  custom: null,
+  chrome: {face:'#dbe4ee', side:'#8fa2b6', emissive:'#10151b', metal:0.95, rough:0.18},
+  gold: {face:'#ffd76a', side:'#d49b18', emissive:'#332200', metal:0.88, rough:0.28},
+  plastic: {face:'#f8f8f8', side:'#00a5c7', emissive:'#002230', metal:0.18, rough:0.38},
+  neon: {face:'#d8ffff', side:'#00f0ff', emissive:'#00a5b0', metal:0.25, rough:0.2},
+  matte: {face:'#d8dde4', side:'#77828f', emissive:'#0d1014', metal:0.02, rough:0.88},
+  ice: {face:'#eefcff', side:'#8fd9ff', emissive:'#103450', metal:0.3, rough:0.16}
+};
+
+const $ = id => document.getElementById(id);
+const fontEl=$('font'), txt=$('txt'), weight=$('weight'), align=$('align'), upper=$('upper'), linesp=$('linesp');
+const w=$('w'), h=$('h'), bgmode=$('bgmode'), bg=$('bg'), fov=$('fov'), camdist=$('camdist'), orbitEnable=$('orbitEnable'), orbitAutoRotate=$('orbitAutoRotate');
+const size=$('size'), depth=$('depth'), curve=$('curve'), bevel=$('bevel'), bevthick=$('bevthick'), bevseg=$('bevseg');
+const preset=$('preset'), face=$('face'), side=$('side'), emissive=$('emissive'), wire=$('wire'), metal=$('metal'), rough=$('rough');
+const envEnable=$('envEnable'), envIntensity=$('envIntensity');
+const ambient=$('ambient'), key=$('key'), rim=$('rim');
+const anim=$('anim'), dur=$('dur'), fps=$('fps'), loops=$('loops'), rot=$('rot'), lift=$('lift'), zoom=$('zoom');
+const nameEl=$('name'), quality=$('quality'), alphaNote=$('alphaNote');
+const buildBtn=$('build'), playBtn=$('play'), stopBtn=$('stop'), exportBtn=$('export'), resetBtn=$('reset');
+const prog=$('prog'), statusEl=$('status'), canvas=$('viewport');
+const result=$('result'), video=$('video'), downloadBtn=$('download'), stats=$('stats');
+
+const labelMap = {
+  size:['sizev', v=>`${v} px`], depth:['depthv', v=>v], curve:['curvev', v=>v], bevel:['bevelv', v=>v], bevthick:['bevthickv', v=>v], bevseg:['bevsegv', v=>v],
+  metal:['metalv', v=>Number(v).toFixed(2)], rough:['roughv', v=>Number(v).toFixed(2)], envIntensity:['envintv', v=>Number(v).toFixed(2)], ambient:['ambientv', v=>Number(v).toFixed(2)], key:['keyv', v=>Number(v).toFixed(2)], rim:['rimv', v=>Number(v).toFixed(2)],
+  rot:['rotv', v=>`${v}°`], lift:['liftv', v=>`${v} px`], zoom:['zoomv', v=>`${v}%`], quality:['qv', v=>`${v}%`]
+};
+
+Object.keys(FONT_LIBRARY).sort().forEach(name=>fontEl.add(new Option(name,name)));
+fontEl.value='Bebas Neue';
+
+const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true, preserveDrawingBuffer:true});
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(38, 16/9, 0.1, 5000);
+const root = new THREE.Group();
+scene.add(root);
+
+const ambLight = new THREE.AmbientLight(0xffffff, 1.1);
+const keyLight = new THREE.DirectionalLight(0xffffff, 1.8);
+keyLight.position.set(2.5, 3.2, 4.8);
+const rimLight = new THREE.DirectionalLight(0x8fdfff, 1.3);
+rimLight.position.set(-4, 2, -3);
+const fillLight = new THREE.DirectionalLight(0xffffff, 0.55);
+fillLight.position.set(-2, -1, 3);
+scene.add(ambLight, keyLight, rimLight, fillLight);
+
+const controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.08;
+controls.target.set(0,0,0);
+controls.autoRotateSpeed = 1.1;
+controls.minDistance = 5;
+controls.maxDistance = 3000;
+controls.addEventListener('change', ()=>{ if(!isExporting) renderNow(); });
+
+let environmentTexture = null;
+function buildProceduralEnvironment(){
+  const envCanvas = document.createElement('canvas');
+  envCanvas.width = 1024;
+  envCanvas.height = 512;
+  const ctx = envCanvas.getContext('2d');
+  const g = ctx.createLinearGradient(0, 0, 0, envCanvas.height);
+  g.addColorStop(0, '#eaf7ff');
+  g.addColorStop(0.18, '#8cc8ff');
+  g.addColorStop(0.42, '#173b63');
+  g.addColorStop(0.62, '#0a1628');
+  g.addColorStop(1, '#03070d');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, envCanvas.width, envCanvas.height);
+  const addGlow = (x,y,r,c,a)=>{
+    const rg = ctx.createRadialGradient(x,y,0,x,y,r);
+    rg.addColorStop(0, `rgba(${c[0]},${c[1]},${c[2]},${a})`);
+    rg.addColorStop(0.35, `rgba(${c[0]},${c[1]},${c[2]},${a*0.45})`);
+    rg.addColorStop(1, `rgba(${c[0]},${c[1]},${c[2]},0)`);
+    ctx.fillStyle = rg;
+    ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+  };
+  addGlow(140,90,120,[255,255,255],0.9);
+  addGlow(880,120,170,[255,245,220],0.7);
+  addGlow(540,240,90,[180,230,255],0.42);
+  addGlow(350,380,220,[0,180,255],0.2);
+  addGlow(760,360,200,[255,190,80],0.18);
+  ctx.fillStyle = 'rgba(255,255,255,0.18)';
+  for(let i=0;i<15;i++){
+    const x = (i*67)%envCanvas.width;
+    ctx.fillRect(x, 0, 4 + (i%5), envCanvas.height);
+  }
+  ctx.fillStyle = 'rgba(255,255,255,0.22)';
+  ctx.fillRect(0, 84, envCanvas.width, 14);
+  ctx.fillStyle = 'rgba(0,0,0,0.28)';
+  ctx.fillRect(0, 310, envCanvas.width, 120);
+  const texture = new THREE.CanvasTexture(envCanvas);
+  texture.mapping = THREE.EquirectangularReflectionMapping;
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.needsUpdate = true;
+  return texture;
+}
+
+let textGroup = new THREE.Group();
+let wireGroup = new THREE.Group();
+root.add(textGroup);
+root.add(wireGroup);
+let animationRaf = 0;
+let previewActive = false;
+let previewStart = 0;
+let outBlob = null;
+let outUrl = '';
+let isExporting = false;
+const fontCache = new Map();
+
+function msg(t,e=false){ statusEl.textContent=t; statusEl.className='status'+(e?' err':''); }
+function clamp(v,a,b){ return Math.min(b, Math.max(a, v)); }
+function clampInt(v,a,b,d){ v=Math.round(+v); return Number.isFinite(v)?clamp(v,a,b):d; }
+function bytes(n){ return n<1024?`${n} B`:n<1048576?`${(n/1024).toFixed(1)} KB`:`${(n/1048576).toFixed(2)} MB`; }
+function revokeOutput(){ if(outUrl) URL.revokeObjectURL(outUrl); outUrl=''; outBlob=null; video.pause(); video.removeAttribute('src'); result.style.display='none'; }
+function clearGroup(group){ while(group.children.length){ const child = group.children.pop(); if(child.geometry) child.geometry.dispose(); if(child.material){ if(Array.isArray(child.material)) child.material.forEach(m=>m.dispose()); else child.material.dispose(); } if(child.parent) child.parent.remove(child); } }
+function disposeLineSegments(group){ while(group.children.length){ const child = group.children.pop(); if(child.geometry) child.geometry.dispose(); if(child.material) child.material.dispose(); if(child.parent) child.parent.remove(child); } }
+
+function syncUI(){
+  alphaNote.classList.toggle('hidden', bgmode.value!=='transparent');
+  bg.disabled = bgmode.value==='transparent';
+  controls.enabled = orbitEnable.checked;
+  controls.autoRotate = orbitAutoRotate.checked && !previewActive;
+  for(const id of Object.keys(labelMap)){
+    const [outId, fmt] = labelMap[id];
+    $(outId).textContent = fmt($(id).value);
+  }
+}
+
+function resizeRenderer(){
+  const width = clampInt(w.value, 320, 3840, 1280);
+  const height = clampInt(h.value, 240, 2160, 720);
+  renderer.setSize(width, height, false);
+  camera.aspect = width / height;
+  camera.fov = clamp(+fov.value || 38, 20, 90);
+  camera.updateProjectionMatrix();
+}
+
+function setCameraDistance(baseDistance){
+  const dist = baseDistance * (+camdist.value || 2.8);
+  camera.position.set(0, 0, dist);
+  controls.minDistance = Math.max(0.2, dist * 0.25);
+  controls.maxDistance = Math.max(5, dist * 5);
+  controls.target.set(0,0,0);
+  controls.update();
+}
+
+function getFontUrl(){
+  const family = fontEl.value;
+  const variants = FONT_LIBRARY[family] || {};
+  return variants[weight.value] || variants[400] || Object.values(variants)[0] || '';
+}
+
+function loadOpenTypeFont(url){
+  if(fontCache.has(url)) return fontCache.get(url);
+  const promise = new Promise((resolve,reject)=>{
+    opentype.load(url, (err, font)=> err ? reject(err) : resolve(font));
+  });
+  fontCache.set(url, promise);
+  return promise;
+}
+
+function opentypePathToShapes(path){
+  const shapePath = new THREE.ShapePath();
+  for(const cmd of path.commands){
+    if(cmd.type==='M') shapePath.moveTo(cmd.x, cmd.y);
+    else if(cmd.type==='L') shapePath.lineTo(cmd.x, cmd.y);
+    else if(cmd.type==='C') shapePath.bezierCurveTo(cmd.x1, cmd.y1, cmd.x2, cmd.y2, cmd.x, cmd.y);
+    else if(cmd.type==='Q') shapePath.quadraticCurveTo(cmd.x1, cmd.y1, cmd.x, cmd.y);
+  }
+  return shapePath.toShapes(true);
+}
+
+function makeMaterials(){
+  const useEnv = envEnable.checked && environmentTexture;
+  const envAmt = useEnv ? (+envIntensity.value || 0) : 0;
+  return [
+    new THREE.MeshStandardMaterial({
+      color: face.value,
+      emissive: emissive.value,
+      emissiveIntensity: 0.28,
+      metalness: clamp(+metal.value || 0, 0, 1),
+      roughness: clamp(+rough.value || 0, 0, 1),
+      envMap: useEnv ? environmentTexture : null,
+      envMapIntensity: envAmt
+    }),
+    new THREE.MeshStandardMaterial({
+      color: side.value,
+      emissive: emissive.value,
+      emissiveIntensity: 0.16,
+      metalness: clamp(+metal.value || 0, 0, 1),
+      roughness: clamp(+rough.value || 0, 0, 1),
+      envMap: useEnv ? environmentTexture : null,
+      envMapIntensity: envAmt
+    })
+  ];
+}
+
+function applySceneSettings(){
+  ambLight.intensity = +ambient.value || 1.1;
+  keyLight.intensity = +key.value || 1.8;
+  rimLight.intensity = +rim.value || 1.3;
+  scene.background = bgmode.value === 'transparent' ? null : new THREE.Color(bg.value);
+  renderer.setClearColor(bgmode.value === 'transparent' ? 0x000000 : new THREE.Color(bg.value), bgmode.value === 'transparent' ? 0 : 1);
+  scene.environment = envEnable.checked ? environmentTexture : null;
+}
+
+function updateMeshMaterials(){
+  const useEnv = envEnable.checked && environmentTexture;
+  const envAmt = useEnv ? (+envIntensity.value || 0) : 0;
+  textGroup.children.forEach(mesh=>{
+    if(Array.isArray(mesh.material) && mesh.material.length >= 2){
+      mesh.material[0].color.set(face.value);
+      mesh.material[0].emissive.set(emissive.value);
+      mesh.material[0].metalness = clamp(+metal.value || 0, 0, 1);
+      mesh.material[0].roughness = clamp(+rough.value || 0, 0, 1);
+      mesh.material[0].envMap = useEnv ? environmentTexture : null;
+      mesh.material[0].envMapIntensity = envAmt;
+      mesh.material[1].color.set(side.value);
+      mesh.material[1].emissive.set(emissive.value);
+      mesh.material[1].metalness = clamp(+metal.value || 0, 0, 1);
+      mesh.material[1].roughness = clamp(+rough.value || 0, 0, 1);
+      mesh.material[1].envMap = useEnv ? environmentTexture : null;
+      mesh.material[1].envMapIntensity = envAmt;
+      mesh.material.forEach(m=>m.needsUpdate = true);
+    }
+  });
+}
+
+function rebuildWireframes(){
+  disposeLineSegments(wireGroup);
+  if(wire.value !== '1') return;
+  textGroup.children.forEach(mesh=>{
+    const edges = new THREE.EdgesGeometry(mesh.geometry, 28);
+    const lines = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({color:0xffffff, transparent:true, opacity:0.16}));
+    lines.position.copy(mesh.position);
+    lines.rotation.copy(mesh.rotation);
+    lines.scale.copy(mesh.scale);
+    wireGroup.add(lines);
+  });
+}
+
+function applyPreset(name){
+  const presetData = MATERIAL_PRESETS[name];
+  if(!presetData) return;
+  face.value = presetData.face;
+  side.value = presetData.side;
+  emissive.value = presetData.emissive;
+  metal.value = presetData.metal;
+  rough.value = presetData.rough;
+  syncUI();
+  updateMeshMaterials();
+  renderNow();
+}
+
+async function rebuildText(){
+  previewActive = false;
+  stopBtn.disabled = true;
+  playBtn.disabled = false;
+  revokeOutput();
+  syncUI();
+  resizeRenderer();
+  applySceneSettings();
+  msg('Building true 3D text...');
+
+  try{
+    clearGroup(textGroup);
+    disposeLineSegments(wireGroup);
+
+    const fontUrl = getFontUrl();
+    if(!fontUrl) throw new Error('No font file is mapped for that selection.');
+    const font = await loadOpenTypeFont(fontUrl);
+
+    const materials = makeMaterials();
+    const baseSize = +size.value || 120;
+    const lineHeight = baseSize * (+linesp.value || 1.08);
+    const extrudeSettings = {
+      depth: +depth.value || 30,
+      bevelEnabled: ((+bevel.value > 0) || (+bevthick.value > 0)) && (+bevseg.value > 0),
+      bevelThickness: +bevthick.value || 0,
+      bevelSize: +bevel.value || 0,
+      bevelOffset: 0,
+      bevelSegments: clampInt(bevseg.value, 0, 10, 4),
+      curveSegments: clampInt(curve.value, 3, 20, 10),
+      steps: 1
+    };
+
+    const lines = (upper.value==='1' ? txt.value.toUpperCase() : txt.value).replace(/\r/g,'').split('\n');
+    const meshes = [];
+    let maxWidth = 0;
+
+    for(const line of lines){
+      const safeLine = line.length ? line : ' ';
+      const path = font.getPath(safeLine, 0, 0, baseSize);
+      const shapes = opentypePathToShapes(path);
+      const geometry = new THREE.ExtrudeGeometry(shapes, extrudeSettings);
+      geometry.scale(1, -1, 1);
+      geometry.computeBoundingBox();
+      const box = geometry.boundingBox;
+      const lineWidth = box.max.x - box.min.x;
+      geometry.translate(-(box.min.x + box.max.x) / 2, -(box.min.y + box.max.y) / 2, -extrudeSettings.depth / 2);
+      geometry.computeVertexNormals();
+      const mesh = new THREE.Mesh(geometry, materials.map(m => m.clone()));
+      meshes.push({mesh, width: lineWidth});
+      if(lineWidth > maxWidth) maxWidth = lineWidth;
+    }
+
+    const totalHeight = (lines.length - 1) * lineHeight;
+    meshes.forEach((item, index)=>{
+      const y = totalHeight / 2 - index * lineHeight;
+      const delta = (maxWidth - item.width) / 2;
+      let x = 0;
+      if(align.value === 'left') x = -delta;
+      else if(align.value === 'right') x = delta;
+      item.mesh.position.set(x, y, 0);
+      textGroup.add(item.mesh);
+    });
+
+    const box = new THREE.Box3().setFromObject(textGroup);
+    const sizeBox = box.getSize(new THREE.Vector3());
+    const center = box.getCenter(new THREE.Vector3());
+    textGroup.position.sub(center);
+    const maxDim = Math.max(sizeBox.x, sizeBox.y, sizeBox.z, 1);
+    setCameraDistance(maxDim);
+    root.position.set(0,0,0);
+    root.rotation.set(0,0,0);
+    root.scale.setScalar(1);
+
+    rebuildWireframes();
+    renderNow();
+    msg('True 3D text built.');
+  }catch(error){
+    console.error(error);
+    msg(error.message || 'Could not build the 3D text.', true);
+  }
+}
+
+function animationState(progress){
+  const r = (+rot.value || 0) * Math.PI / 180;
+  const liftAmt = +lift.value || 0;
+  const zoomAmt = (+zoom.value || 0) / 100;
+  const s = Math.sin(progress * Math.PI * 2);
+  const c = Math.cos(progress * Math.PI * 2);
+  let rx=0, ry=0, rz=0, py=0, scale=1, px=0;
+  switch(anim.value){
+    case 'orbit': ry = s * r; rx = c * r * 0.45; py = s * liftAmt * 0.18; scale = 1 + s * zoomAmt * 0.16; break;
+    case 'spin': ry = progress * Math.PI * 2; rx = Math.sin(progress * Math.PI * 4) * r * 0.1; break;
+    case 'bounce': py = Math.abs(s) * liftAmt * 0.4; ry = s * r * 0.3; scale = 1 + Math.abs(s) * zoomAmt * 0.18; break;
+    case 'pulse': scale = 1 + s * zoomAmt; ry = s * r * 0.16; break;
+    case 'wobble': ry = Math.sin(progress * Math.PI * 4) * r; rx = Math.cos(progress * Math.PI * 3) * r * 0.25; rz = Math.sin(progress * Math.PI * 4) * r * 0.08; py = Math.sin(progress * Math.PI * 4) * liftAmt * 0.18; break;
+    case 'drift': px = s * liftAmt * 0.2; py = c * liftAmt * 0.16; ry = s * r * 0.22; scale = 1 + s * zoomAmt * 0.16; break;
+  }
+  return {rx, ry, rz, py, scale, px};
+}
+
+function renderAtTime(timeMs){
+  const durationMs = Math.max(100, (+dur.value || 5) * 1000);
+  const progress = ((timeMs % durationMs) / durationMs + 1) % 1;
+  const state = previewActive ? animationState(progress) : {rx:0, ry:0, rz:0, py:0, scale:1, px:0};
+  root.rotation.set(state.rx, state.ry, state.rz);
+  root.position.set(state.px, -state.py, 0);
+  root.scale.setScalar(state.scale);
+  controls.autoRotate = orbitAutoRotate.checked && !previewActive;
+  controls.enabled = orbitEnable.checked;
+  controls.update();
+  renderer.render(scene, camera);
+}
+
+function renderNow(){ renderAtTime(0); }
+
+function animationLoop(now){
+  if(previewActive){
+    renderAtTime(now - previewStart);
+  } else {
+    renderNow();
+  }
+  animationRaf = requestAnimationFrame(animationLoop);
+}
+
+function playPreview(){
+  revokeOutput();
+  previewActive = true;
+  previewStart = performance.now();
+  playBtn.disabled = true;
+  stopBtn.disabled = false;
+}
+
+function stopPreview(){
+  previewActive = false;
+  stopBtn.disabled = true;
+  playBtn.disabled = false;
+  renderNow();
+}
+
+function pickMime(alpha){
+  if(typeof MediaRecorder === 'undefined') return '';
+  const list = alpha ? ['video/webm;codecs=vp9', 'video/webm'] : ['video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm'];
+  return list.find(t => MediaRecorder.isTypeSupported(t)) || '';
+}
+
+async function exportWebM(){
+  if(isExporting) return;
+  stopPreview();
+  revokeOutput();
+  isExporting = true;
+  [buildBtn, playBtn, exportBtn, resetBtn].forEach(b => b.disabled = true);
+  prog.style.display = 'block';
+  prog.value = 0;
+
+  try{
+    msg('Preparing WebM export...');
+    const alpha = bgmode.value === 'transparent';
+    const mime = pickMime(alpha);
+    if(!mime) throw new Error(alpha ? 'Transparent WebM requires browser VP9 support.' : 'This browser cannot record WebM from the canvas.');
+    const frameRate = clampInt(fps.value, 1, 60, 30);
+    const durationSec = Math.max(1, +dur.value || 5);
+    const totalFrames = Math.max(1, Math.round(frameRate * durationSec));
+    const frameDuration = 1000 / frameRate;
+    const stream = renderer.domElement.captureStream(frameRate);
+    const q = clamp((+quality.value || 90) / 100, 0.1, 1);
+    const bitrate = Math.round(Math.max(1800000, Math.min(32000000, renderer.domElement.width * renderer.domElement.height * frameRate * 0.09 * q)));
+    const chunks = [];
+    const recorder = new MediaRecorder(stream, {mimeType:mime, videoBitsPerSecond:bitrate});
+
+    const stopped = new Promise((resolve,reject)=>{
+      recorder.ondataavailable = e => { if(e.data && e.data.size) chunks.push(e.data); };
+      recorder.onerror = e => reject(e.error || new Error('Recorder error.'));
+      recorder.onstop = resolve;
+    });
+
+    recorder.start();
+    for(let i=0;i<totalFrames;i++){
+      previewActive = true;
+      renderAtTime(i * frameDuration);
+      prog.value = Math.round(((i + 1) / totalFrames) * 95);
+      msg(`Recording frame ${i + 1} of ${totalFrames}...`);
+      await new Promise(r => setTimeout(r, frameDuration));
+    }
+    previewActive = false;
+    recorder.stop();
+    await stopped;
+    stream.getTracks().forEach(t => t.stop());
+
+    outBlob = new Blob(chunks, {type:mime});
+    outUrl = URL.createObjectURL(outBlob);
+    video.src = outUrl;
+    video.load();
+    result.style.display = 'block';
+    stats.textContent = `${renderer.domElement.width} × ${renderer.domElement.height} • ${frameRate} fps • ${durationSec.toFixed(2)} sec • ${bytes(outBlob.size)}` + (alpha ? ' • transparent alpha attempt' : '');
+    prog.value = 100;
+    msg('WebM exported successfully.');
+    renderNow();
+  }catch(error){
+    console.error(error);
+    msg(error.message || 'Export failed.', true);
+  }finally{
+    isExporting = false;
+    previewActive = false;
+    [buildBtn, playBtn, exportBtn, resetBtn].forEach(b => b.disabled = false);
+    setTimeout(() => prog.style.display = 'none', 400);
+    renderNow();
+  }
+}
+
+function downloadResult(){
+  if(!outUrl) return;
+  const a = document.createElement('a');
+  a.href = outUrl;
+  a.download = (nameEl.value || '3d-font-animation').replace(/\.webm$/i, '') + '.webm';
+  a.click();
+}
+
+function resetDefaults(){
+  txt.value = "Luke's Tools";
+  fontEl.value = 'Bebas Neue';
+  weight.value = '700';
+  align.value = 'center';
+  upper.value = '0';
+  linesp.value = '1.08';
+  w.value = 1280;
+  h.value = 720;
+  bgmode.value = 'solid';
+  bg.value = '#10131a';
+  fov.value = 38;
+  camdist.value = 2.8;
+  orbitEnable.checked = true;
+  orbitAutoRotate.checked = false;
+  envEnable.checked = true;
+  envIntensity.value = 1.2;
+  size.value = 120;
+  depth.value = 30;
+  curve.value = 10;
+  bevel.value = 3;
+  bevthick.value = 3;
+  bevseg.value = 4;
+  preset.value = 'plastic';
+  face.value = '#f8f8f8';
+  side.value = '#00a5c7';
+  emissive.value = '#002230';
+  wire.value = '0';
+  metal.value = 0.18;
+  rough.value = 0.38;
+  ambient.value = 1.1;
+  key.value = 1.8;
+  rim.value = 1.3;
+  anim.value = 'orbit';
+  dur.value = 5;
+  fps.value = 30;
+  loops.value = 0;
+  rot.value = 22;
+  lift.value = 18;
+  zoom.value = 8;
+  nameEl.value = '3d-font-animation';
+  quality.value = 90;
+  syncUI();
+  applySceneSettings();
+  rebuildText();
+  msg('Defaults restored.');
+}
+
+function handleSimpleAppearanceChange(){
+  syncUI();
+  resizeRenderer();
+  applySceneSettings();
+  updateMeshMaterials();
+  rebuildWireframes();
+  renderNow();
+}
+
+[bgmode, bg, fov, camdist, orbitEnable, orbitAutoRotate, envEnable, envIntensity, face, side, emissive, wire, metal, rough, ambient, key, rim, anim, dur, fps, loops, rot, lift, zoom, quality].forEach(el=>{
+  el.addEventListener('input', handleSimpleAppearanceChange);
+  el.addEventListener('change', handleSimpleAppearanceChange);
+});
+
+preset.addEventListener('change', ()=>{
+  if(preset.value !== 'custom') applyPreset(preset.value);
+  else handleSimpleAppearanceChange();
+});
+
+[face, side, emissive, metal, rough].forEach(el=>{
+  el.addEventListener('input', ()=>{ preset.value = 'custom'; handleSimpleAppearanceChange(); });
+  el.addEventListener('change', ()=>{ preset.value = 'custom'; handleSimpleAppearanceChange(); });
+});
+
+buildBtn.addEventListener('click', rebuildText);
+playBtn.addEventListener('click', playPreview);
+stopBtn.addEventListener('click', stopPreview);
+exportBtn.addEventListener('click', exportWebM);
+resetBtn.addEventListener('click', resetDefaults);
+downloadBtn.addEventListener('click', downloadResult);
+window.addEventListener('beforeunload', revokeOutput);
+window.addEventListener('resize', ()=>{ resizeRenderer(); renderNow(); });
+
+syncUI();
+resizeRenderer();
+environmentTexture = buildProceduralEnvironment();
+applyPreset('plastic');
+applySceneSettings();
+rebuildText();
+animationRaf = requestAnimationFrame(animationLoop);
+</script>
+</body>
+</html>
