@@ -4,167 +4,36 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>3D Font Animator</title>
-<link rel="icon" type="image/png" href="https://raw.githubusercontent.com/lukeo25/LukeAnimate/main/LukeIcon.png">
-<link rel="shortcut icon" type="image/png" href="https://raw.githubusercontent.com/lukeo25/LukeAnimate/main/LukeIcon.png">
-<link rel="apple-touch-icon" href="https://raw.githubusercontent.com/lukeo25/LukeAnimate/main/LukeIcon.png">
+<link rel="icon" href="https://raw.githubusercontent.com/lukeo25/LukeAnimate/main/LukeIcon.png">
 <style>
 :root{--b:#e8ecf0;--t:#1a202c;--m:#667281;--a:#00a9c0;--c:#00bcd4;--d:#c85252;--sd:#c5ccd6;--sl:#fff}*{box-sizing:border-box}body{margin:0;background:var(--b);color:var(--t);font-family:Arial,sans-serif}.app{max-width:1520px;margin:auto;padding:30px}.top{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:26px}h1{margin:0 0 7px;font-size:42px}.sub{margin:0;color:var(--m);line-height:1.45;max-width:950px}.back,.panel,button{background:var(--b);box-shadow:7px 7px 16px var(--sd),-7px -7px 16px var(--sl)}.back{padding:12px 18px;border-radius:16px;color:var(--t);text-decoration:none;font-weight:700}.grid{display:grid;grid-template-columns:400px 1fr;gap:24px}.panel{border-radius:22px;padding:20px}.controls{position:sticky;top:18px}.g{margin-bottom:19px}.gt{display:block;color:var(--a);font-weight:700;margin-bottom:9px}.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}.full{grid-column:1/-1}label{font-size:13px;color:var(--m);font-weight:600}input[type=number],input[type=text],select,textarea{width:100%;margin-top:5px;padding:10px;border:0;border-radius:12px;background:var(--b);box-shadow:inset 4px 4px 9px var(--sd),inset -4px -4px 9px var(--sl);font:inherit}textarea{min-height:78px;resize:vertical}input[type=color]{width:100%;height:42px;margin-top:5px;border:0;background:var(--b);border-radius:12px;box-shadow:inset 4px 4px 9px var(--sd),inset -4px -4px 9px var(--sl)}input[type=range]{width:100%;accent-color:var(--c)}.sv{display:flex;justify-content:space-between}.check{display:flex;align-items:center;gap:8px;margin-top:10px}.check input{accent-color:var(--c)}button{border:0;border-radius:13px;padding:11px;font-weight:700;cursor:pointer}button:hover:not(:disabled){color:var(--a)}button:disabled{opacity:.45}.primary{background:linear-gradient(135deg,#00bcd4,#26c6da);color:#fff!important;box-shadow:0 6px 16px rgba(0,188,212,.3)}.danger{color:var(--d)}.buttons{display:grid;gap:9px}.note{margin-top:8px;padding:9px 11px;border-radius:11px;background:rgba(0,188,212,.08);font-size:12px;color:var(--m);line-height:1.4}.hidden{display:none!important}.status{font-size:13px;color:var(--m);line-height:1.4;min-height:18px}.err{color:var(--d)}progress{display:none;width:100%;accent-color:var(--c)}.stage{min-height:470px;border-radius:18px;overflow:hidden;display:grid;place-items:center;background:linear-gradient(45deg,#d7dce2 25%,transparent 25%),linear-gradient(-45deg,#d7dce2 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#d7dce2 75%),linear-gradient(-45deg,transparent 75%,#d7dce2 75%),#eef1f4;background-size:24px 24px;background-position:0 0,0 12px,12px -12px,-12px 0;box-shadow:inset 4px 4px 10px var(--sd),inset -4px -4px 10px var(--sl)}canvas{max-width:100%;max-height:72vh}.result{display:none;margin-top:18px}.result video{display:block;max-width:100%;max-height:55vh;border-radius:12px;background:#111}.info{margin-top:10px;font-size:13px;color:var(--m)}@media(max-width:900px){.grid{grid-template-columns:1fr}.controls{position:static}.top{flex-direction:column}.back{align-self:stretch;text-align:center}}@media(max-width:520px){.fields{grid-template-columns:1fr}.full{grid-column:auto}}
 </style>
 </head>
 <body>
-<div class="app">
-  <div class="top">
-    <div>
-      <h1>3D Font Animator</h1>
-      <p class="sub">Type text, choose a Google Font, create an extruded 3D style animation, preview it live, and export WebM. This version adds a stronger faux bevel treatment so the face of the text looks more like a shaped 3D surface rather than a flat front.</p>
-    </div>
-    <a class="back" href="index.html">← Luke's Tools</a>
-  </div>
-
-  <div class="grid">
-    <aside class="panel controls">
-      <div class="g">
-        <span class="gt">1. Text</span>
-        <div class="fields">
-          <label class="full">Text<textarea id="txt">Luke's Tools</textarea></label>
-          <label>Google Font<select id="font"></select></label>
-          <label>Weight<select id="weight"><option>400</option><option>500</option><option>600</option><option selected>700</option><option>800</option><option>900</option></select></label>
-          <label>Align<select id="align"><option selected>center</option><option>left</option><option>right</option></select></label>
-          <label>Uppercase<select id="upper"><option value="0" selected>Off</option><option value="1">On</option></select></label>
-        </div>
-      </div>
-
-      <div class="g">
-        <span class="gt">2. Canvas</span>
-        <div class="fields">
-          <label>Width<input id="w" type="number" min="320" max="3840" value="1280"></label>
-          <label>Height<input id="h" type="number" min="240" max="2160" value="720"></label>
-          <label>Background<select id="bgmode"><option value="solid" selected>Solid colour</option><option value="transparent">Transparent WebM</option></select></label>
-          <label>Colour<input id="bg" type="color" value="#10131a"></label>
-          <label>Face<input id="face" type="color" value="#f8f8f8"></label>
-          <label>Extrusion<input id="side" type="color" value="#0089a7"></label>
-          <label>Stroke<input id="stroke" type="color" value="#06131a"></label>
-        </div>
-        <div id="alphaNote" class="note hidden">Experimental transparency records an alpha canvas with VP9 WebM. Browser and player support varies, so transparent areas may appear black in some players.</div>
-      </div>
-
-      <div class="g">
-        <span class="gt">3. 3D style</span>
-        <label><span class="sv"><span>Font size</span><b id="sizev"></b></span><input id="size" type="range" min="40" max="320" value="170"></label>
-        <label><span class="sv"><span>Depth</span><b id="depthv"></b></span><input id="depth" type="range" min="2" max="80" value="28"></label>
-        <label><span class="sv"><span>Perspective slant</span><b id="slantv"></b></span><input id="slant" type="range" min="-45" max="45" value="18"></label>
-        <label><span class="sv"><span>Stroke width</span><b id="swv"></b></span><input id="sw" type="range" min="0" max="12" value="3"></label>
-        <label><span class="sv"><span>Bevel size</span><b id="bevelv"></b></span><input id="bevel" type="range" min="0" max="40" value="12"></label>
-        <label><span class="sv"><span>Bevel strength</span><b id="bevstrv"></b></span><input id="bevstr" type="range" min="0" max="100" value="58"></label>
-        <label class="check"><input id="shadow" type="checkbox" checked>Show shadow</label>
-        <label class="check"><input id="bevelon" type="checkbox" checked>Enable bevel face shading</label>
-        <div class="note">The bevel is faked in 2D by combining a face gradient, inner highlight, inner shadow and rim tints. It is not a true 3D mesh, but it gives a stronger sculpted look.</div>
-      </div>
-
-      <div class="g">
-        <span class="gt">4. Animation</span>
-        <div class="fields">
-          <label>Type<select id="anim"><option value="orbit" selected>Orbit tilt</option><option value="spin">Spin</option><option value="bounce">Bounce</option><option value="pulse">Pulse</option><option value="wobble">Wobble</option><option value="drift">Drift</option></select></label>
-          <label>Duration sec<input id="dur" type="number" min="1" max="60" step=".1" value="5"></label>
-          <label>FPS<input id="fps" type="number" min="1" max="60" value="30"></label>
-          <label>Preview loops<input id="loops" type="number" min="0" max="999" value="0"></label>
-        </div>
-        <label><span class="sv"><span>Rotation</span><b id="rotv"></b></span><input id="rot" type="range" min="0" max="60" value="22"></label>
-        <label><span class="sv"><span>Lift</span><b id="liftv"></b></span><input id="lift" type="range" min="0" max="120" value="24"></label>
-        <label><span class="sv"><span>Zoom</span><b id="zoomv"></b></span><input id="zoom" type="range" min="0" max="35" value="8"></label>
-      </div>
-
-      <div class="g">
-        <span class="gt">5. Export</span>
-        <div class="fields">
-          <label class="full">Filename<input id="name" type="text" value="3d-font-animation"></label>
-        </div>
-        <label><span class="sv"><span>WebM quality</span><b id="qv"></b></span><input id="quality" type="range" min="10" max="100" value="90"></label>
-      </div>
-
-      <div class="g buttons">
-        <button id="play">Play Preview</button>
-        <button id="stop" disabled>Stop Preview</button>
-        <button id="export" class="primary">Export WebM</button>
-        <button id="reset" class="danger">Reset Defaults</button>
-        <progress id="prog" max="100" value="0"></progress>
-        <div id="status" class="status">Ready.</div>
-      </div>
-    </aside>
-
-    <main class="panel">
-      <div class="stage"><canvas id="cv" width="1280" height="720"></canvas></div>
-      <section id="result" class="result">
-        <h2>Exported WebM</h2>
-        <video id="video" controls loop playsinline></video>
-        <button id="download" class="primary" style="margin-top:10px">Download WebM</button>
-        <div id="stats" class="info"></div>
-      </section>
-    </main>
-  </div>
-</div>
-
+<div class="app"><div class="top"><div><h1>3D Font Animator</h1><p class="sub">Animate Google Fonts as extruded 3D-style text, add bevel shading, preview the motion, and export WebM.</p></div><a class="back" href="index.html">← Luke's Tools</a></div>
+<div class="grid"><aside class="panel controls">
+<div class="g"><span class="gt">1. Text</span><div class="fields"><label class="full">Text<textarea id="txt">Luke's Tools</textarea></label><label>Google Font<select id="font"></select></label><label>Weight<select id="weight"><option>400</option><option>500</option><option>600</option><option selected>700</option><option>800</option><option>900</option></select></label><label>Align<select id="align"><option selected>center</option><option>left</option><option>right</option></select></label><label>Uppercase<select id="upper"><option value="0" selected>Off</option><option value="1">On</option></select></label></div></div>
+<div class="g"><span class="gt">2. Canvas</span><div class="fields"><label>Width<input id="w" type="number" min="320" max="3840" value="1280"></label><label>Height<input id="h" type="number" min="240" max="2160" value="720"></label><label>Background<select id="bgmode"><option value="solid" selected>Solid colour</option><option value="transparent">Transparent WebM</option></select></label><label>Colour<input id="bg" type="color" value="#10131a"></label><label>Face<input id="face" type="color" value="#f8f8f8"></label><label>Extrusion<input id="side" type="color" value="#0089a7"></label><label>Stroke<input id="stroke" type="color" value="#06131a"></label></div><div id="alphaNote" class="note hidden">Experimental transparency uses VP9 WebM. Some players show transparent pixels as black.</div></div>
+<div class="g"><span class="gt">3. 3D style</span><label><span class="sv"><span>Font size</span><b id="sizev"></b></span><input id="size" type="range" min="40" max="320" value="170"></label><label><span class="sv"><span>Depth</span><b id="depthv"></b></span><input id="depth" type="range" min="2" max="80" value="28"></label><label><span class="sv"><span>Perspective slant</span><b id="slantv"></b></span><input id="slant" type="range" min="-45" max="45" value="18"></label><label><span class="sv"><span>Stroke width</span><b id="swv"></b></span><input id="sw" type="range" min="0" max="12" value="3"></label><label><span class="sv"><span>Bevel size</span><b id="bevelv"></b></span><input id="bevel" type="range" min="0" max="40" value="12"></label><label><span class="sv"><span>Bevel strength</span><b id="bevstrv"></b></span><input id="bevstr" type="range" min="0" max="100" value="58"></label><label class="check"><input id="shadow" type="checkbox" checked>Show shadow</label><label class="check"><input id="bevelon" type="checkbox" checked>Enable bevel face shading</label></div>
+<div class="g"><span class="gt">4. Animation</span><div class="fields"><label>Type<select id="anim"><option value="orbit" selected>Orbit tilt</option><option value="spin">Spin</option><option value="bounce">Bounce</option><option value="pulse">Pulse</option><option value="wobble">Wobble</option><option value="drift">Drift</option></select></label><label>Duration sec<input id="dur" type="number" min="1" max="60" step=".1" value="5"></label><label>FPS<input id="fps" type="number" min="1" max="60" value="30"></label><label>Preview loops<input id="loops" type="number" min="0" max="999" value="0"></label></div><label><span class="sv"><span>Rotation</span><b id="rotv"></b></span><input id="rot" type="range" min="0" max="60" value="22"></label><label><span class="sv"><span>Lift</span><b id="liftv"></b></span><input id="lift" type="range" min="0" max="120" value="24"></label><label><span class="sv"><span>Zoom</span><b id="zoomv"></b></span><input id="zoom" type="range" min="0" max="35" value="8"></label></div>
+<div class="g"><span class="gt">5. Export</span><div class="fields"><label class="full">Filename<input id="name" type="text" value="3d-font-animation"></label></div><label><span class="sv"><span>WebM quality</span><b id="qv"></b></span><input id="quality" type="range" min="10" max="100" value="90"></label></div>
+<div class="g buttons"><button id="play">Play Preview</button><button id="stop" disabled>Stop Preview</button><button id="export" class="primary">Export WebM</button><button id="reset" class="danger">Reset Defaults</button><progress id="prog" max="100" value="0"></progress><div id="status" class="status">Ready.</div></div>
+</aside><main class="panel"><div class="stage"><canvas id="cv" width="1280" height="720"></canvas></div><section id="result" class="result"><h2>Exported WebM</h2><video id="video" controls loop playsinline></video><button id="download" class="primary" style="margin-top:10px">Download WebM</button><div id="stats" class="info"></div></section></main></div></div>
 <script>
 const F=['Roboto','Montserrat','Poppins','Oswald','Anton','Bebas Neue','Playfair Display','Bangers','Orbitron','Fredoka','Cinzel','Exo 2','Bungee'];
-const $=x=>document.getElementById(x);
-const font=$('font'),txt=$('txt'),weight=$('weight'),align=$('align'),upper=$('upper'),w=$('w'),h=$('h'),bgmode=$('bgmode'),bg=$('bg'),face=$('face'),side=$('side'),stroke=$('stroke'),size=$('size'),depth=$('depth'),slant=$('slant'),sw=$('sw'),bevel=$('bevel'),bevstr=$('bevstr'),shadow=$('shadow'),bevelon=$('bevelon'),anim=$('anim'),dur=$('dur'),fps=$('fps'),loops=$('loops'),rot=$('rot'),lift=$('lift'),zoom=$('zoom'),name=$('name'),quality=$('quality'),alphaNote=$('alphaNote'),cv=$('cv'),cx=cv.getContext('2d',{alpha:true}),play=$('play'),stop=$('stop'),exp=$('export'),reset=$('reset'),prog=$('prog'),status=$('status'),result=$('result'),video=$('video'),download=$('download'),stats=$('stats');
-let raf=0,start=0,busy=false,outBlob=null,outUrl='';
-const tempCanvas=document.createElement('canvas');
-const tempCtx=tempCanvas.getContext('2d',{alpha:true});
-F.forEach(x=>font.add(new Option(x,x)));
-font.value='Bebas Neue';
-function cl(v,a,b){return Math.min(b,Math.max(a,v))}
-function ci(v,a,b,d){v=Math.round(+v);return Number.isFinite(v)?cl(v,a,b):d}
-function msg(t,e=false){status.textContent=t;status.className='status'+(e?' err':'')}
-function bytes(n){return n<1024?n+' B':n<1048576?(n/1024).toFixed(1)+' KB':(n/1048576).toFixed(2)+' MB'}
-function hexToRgb(h){h=h.replace('#','');if(h.length===3)h=h.split('').map(ch=>ch+ch).join('');return{r:parseInt(h.slice(0,2),16),g:parseInt(h.slice(2,4),16),b:parseInt(h.slice(4,6),16)}}
-function rgbToHex(r,g,b){return '#'+[r,g,b].map(v=>cl(Math.round(v),0,255).toString(16).padStart(2,'0')).join('')}
-function tint(hex,amt){const c=hexToRgb(hex);return rgbToHex(c.r+(255-c.r)*amt,c.g+(255-c.g)*amt,c.b+(255-c.b)*amt)}
-function shade(hex,amt){const c=hexToRgb(hex);return rgbToHex(c.r*(1-amt),c.g*(1-amt),c.b*(1-amt))}
-function mix(a,b,t){const A=hexToRgb(a),B=hexToRgb(b);return rgbToHex(A.r+(B.r-A.r)*t,A.g+(B.g-A.g)*t,A.b+(B.b-A.b)*t)}
+const $=x=>document.getElementById(x),font=$('font'),txt=$('txt'),weight=$('weight'),align=$('align'),upper=$('upper'),w=$('w'),h=$('h'),bgmode=$('bgmode'),bg=$('bg'),face=$('face'),side=$('side'),stroke=$('stroke'),size=$('size'),depth=$('depth'),slant=$('slant'),sw=$('sw'),bevel=$('bevel'),bevstr=$('bevstr'),shadow=$('shadow'),bevelon=$('bevelon'),anim=$('anim'),dur=$('dur'),fps=$('fps'),loops=$('loops'),rot=$('rot'),lift=$('lift'),zoom=$('zoom'),name=$('name'),quality=$('quality'),alphaNote=$('alphaNote'),cv=$('cv'),cx=cv.getContext('2d',{alpha:true}),play=$('play'),stop=$('stop'),exp=$('export'),reset=$('reset'),prog=$('prog'),status=$('status'),result=$('result'),video=$('video'),download=$('download'),stats=$('stats');
+let raf=0,start=0,busy=false,outBlob=null,outUrl='';F.forEach(x=>font.add(new Option(x,x)));font.value='Bebas Neue';
+function cl(v,a,b){return Math.min(b,Math.max(a,v))}function ci(v,a,b,d){v=Math.round(+v);return Number.isFinite(v)?cl(v,a,b):d}function msg(t,e=false){status.textContent=t;status.className='status'+(e?' err':'')}function bytes(n){return n<1024?n+' B':n<1048576?(n/1024).toFixed(1)+' KB':(n/1048576).toFixed(2)+' MB'}function rgb(h){h=h.replace('#','');return{r:parseInt(h.slice(0,2),16),g:parseInt(h.slice(2,4),16),b:parseInt(h.slice(4,6),16)}}function hex(r,g,b){return'#'+[r,g,b].map(v=>cl(Math.round(v),0,255).toString(16).padStart(2,'0')).join('')}function tint(h,a){const c=rgb(h);return hex(c.r+(255-c.r)*a,c.g+(255-c.g)*a,c.b+(255-c.b)*a)}function shade(h,a){const c=rgb(h);return hex(c.r*(1-a),c.g*(1-a),c.b*(1-a))}function mix(a,b,t){const A=rgb(a),B=rgb(b);return hex(A.r+(B.r-A.r)*t,A.g+(B.g-A.g)*t,A.b+(B.b-A.b)*t)}
 function sync(){bg.disabled=bgmode.value==='transparent';alphaNote.classList.toggle('hidden',bgmode.value!=='transparent');$('sizev').textContent=size.value+' px';$('depthv').textContent=depth.value;$('slantv').textContent=slant.value+'°';$('swv').textContent=sw.value+' px';$('bevelv').textContent=bevel.value+' px';$('bevstrv').textContent=bevstr.value+'%';$('rotv').textContent=rot.value+'°';$('liftv').textContent=lift.value+' px';$('zoomv').textContent=zoom.value+'%';$('qv').textContent=quality.value+'%'}
 async function loadFont(){const id='gf-'+font.value.replace(/\W/g,'-')+'-'+weight.value;if(!document.getElementById(id)){const l=document.createElement('link');l.id=id;l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family='+font.value.replace(/ /g,'+')+':wght@400;500;600;700;800;900&display=swap';document.head.appendChild(l)}try{await document.fonts.load(weight.value+' 80px "'+font.value+'"');await document.fonts.ready}catch{}}
-function resize(){cv.width=ci(w.value,320,3840,1280);cv.height=ci(h.value,240,2160,720);tempCanvas.width=cv.width;tempCanvas.height=cv.height}
+function resize(){cv.width=ci(w.value,320,3840,1280);cv.height=ci(h.value,240,2160,720)}
 function state(p){const r=+rot.value*Math.PI/180,L=+lift.value,z=+zoom.value/100,s=Math.sin(p*Math.PI*2),c=Math.cos(p*Math.PI*2);let ax=0,ay=0,y=0,x=0,sc=1;if(anim.value==='orbit'){ay=s*r;ax=c*r*.45;y=s*L*.3;sc=1+s*z*.2}else if(anim.value==='spin'){ay=p*Math.PI*2;ax=Math.sin(p*Math.PI*4)*r*.12}else if(anim.value==='bounce'){y=Math.abs(s)*L;ay=s*r*.3;sc=1+Math.abs(s)*z*.15}else if(anim.value==='pulse'){sc=1+s*z;ay=s*r*.15}else if(anim.value==='wobble'){ay=Math.sin(p*Math.PI*4)*r;ax=Math.cos(p*Math.PI*3)*r*.25;y=Math.sin(p*Math.PI*4)*L*.2}else{x=s*L*.8;y=c*L*.3;ay=s*r*.2;sc=1+s*z*.15}return{ax,ay,x,y,sc}}
-function makeLayout(ctx,lines,lh){return lines.map(line=>{const m=ctx.measureText(line).width;return{line,x:align.value==='center'?-m/2:align.value==='left'?-cv.width*.34:cv.width*.34-m,width:m}})}
-function drawFaceText(ctx,layout,sy,lh){layout.forEach((o,i)=>ctx.fillText(o.line,o.x,sy+i*lh))}
-function drawFaceStroke(ctx,layout,sy,lh){layout.forEach((o,i)=>ctx.strokeText(o.line,o.x,sy+i*lh))}
-function renderBevelFace(targetCtx,layout,sy,lh,sx){const fs=+size.value;const strokeW=+sw.value/Math.max(.2,sx);const bevelSize=+bevel.value/Math.max(.2,sx);const strength=+bevstr.value/100;tempCtx.setTransform(1,0,0,1,0,0);tempCtx.clearRect(0,0,tempCanvas.width,tempCanvas.height);tempCtx.save();tempCtx.translate(cv.width/2,cv.height/2);tempCtx.font=weight.value+' '+fs+'px "'+font.value+'",sans-serif';tempCtx.textBaseline='middle';tempCtx.lineJoin='round';tempCtx.lineWidth=strokeW;
-const grad=tempCtx.createLinearGradient(0,sy-fs,0,sy+(layout.length-1)*lh+fs);grad.addColorStop(0,tint(face.value,.28*strength+.08));grad.addColorStop(.42,tint(face.value,.1*strength));grad.addColorStop(.58,face.value);grad.addColorStop(1,shade(face.value,.22*strength+.06));tempCtx.fillStyle=grad;drawFaceText(tempCtx,layout,sy,lh);
-if(bevelon.checked&&bevelSize>0&&strength>0){
-  tempCtx.globalCompositeOperation='source-atop';
-  tempCtx.fillStyle='rgba(255,255,255,'+(0.18+0.28*strength)+')';
-  tempCtx.shadowColor='rgba(255,255,255,'+(0.14+0.2*strength)+')';
-  tempCtx.shadowBlur=bevelSize*0.9;
-  tempCtx.save(); tempCtx.translate(-bevelSize*0.55,-bevelSize*0.55); drawFaceText(tempCtx,layout,sy,lh); tempCtx.restore();
-  tempCtx.shadowBlur=0;
-  tempCtx.fillStyle='rgba(0,0,0,'+(0.14+0.24*strength)+')';
-  tempCtx.shadowColor='rgba(0,0,0,'+(0.12+0.18*strength)+')';
-  tempCtx.shadowBlur=bevelSize*0.8;
-  tempCtx.save(); tempCtx.translate(bevelSize*0.6,bevelSize*0.65); drawFaceText(tempCtx,layout,sy,lh); tempCtx.restore();
-  tempCtx.shadowBlur=0;
-  tempCtx.strokeStyle='rgba(255,255,255,'+(0.08+0.22*strength)+')';
-  tempCtx.lineWidth=Math.max(1,bevelSize*0.38);
-  tempCtx.save(); tempCtx.translate(-bevelSize*0.22,-bevelSize*0.22); drawFaceStroke(tempCtx,layout,sy,lh); tempCtx.restore();
-  tempCtx.strokeStyle='rgba(0,0,0,'+(0.08+0.18*strength)+')';
-  tempCtx.lineWidth=Math.max(1,bevelSize*0.42);
-  tempCtx.save(); tempCtx.translate(bevelSize*0.22,bevelSize*0.22); drawFaceStroke(tempCtx,layout,sy,lh); tempCtx.restore();
-  tempCtx.globalCompositeOperation='source-over';
-}
-if(+sw.value){tempCtx.strokeStyle=stroke.value;tempCtx.lineWidth=strokeW;drawFaceStroke(tempCtx,layout,sy,lh)}
-  tempCtx.restore();
-  targetCtx.drawImage(tempCanvas,0,0);
-}
-function render(ms){const D=Math.max(100,(+dur.value||5)*1000),p=((ms%D)/D+1)%1,S=state(p),fs=+size.value,dep=+depth.value,sl=+slant.value*Math.PI/180,lines=(upper.value==='1'?txt.value.toUpperCase():txt.value).replace(/\r/g,'').split('\n');cx.setTransform(1,0,0,1,0,0);cx.clearRect(0,0,cv.width,cv.height);if(bgmode.value!=='transparent'){cx.fillStyle=bg.value;cx.fillRect(0,0,cv.width,cv.height)}cx.save();cx.translate(cv.width/2+S.x,cv.height/2-S.y);cx.scale(S.sc,S.sc);const sx=Math.max(.18,Math.abs(Math.cos(S.ay))),sk=Math.sin(S.ay)*Math.tan(sl)*.7,ex=Math.cos(S.ay-sl)*dep,ey=Math.sin(S.ax+sl*.3)*dep*.9;cx.transform(1,0,sk,1,0,0);cx.scale(sx,1);cx.font=weight.value+' '+fs+'px "'+font.value+'",sans-serif';cx.textBaseline='middle';cx.lineJoin='round';cx.lineWidth=+sw.value/Math.max(.2,sx);const lh=fs*1.12,sy=-(lines.length-1)*lh/2,layout=makeLayout(cx,lines,lh);if(shadow.checked){cx.save();cx.fillStyle='rgba(0,0,0,.25)';cx.shadowColor='rgba(0,0,0,.25)';cx.shadowBlur=20;layout.forEach((o,i)=>cx.fillText(o.line,o.x+18,sy+i*lh+18));cx.restore()}const layers=Math.max(2,Math.round(dep));for(let j=layers;j>=1;j--){const t=j/layers;cx.fillStyle=mix(side.value,face.value,t*.18);cx.strokeStyle=shade(stroke.value,.08);layout.forEach((o,i)=>{const xx=o.x+ex*t,yy=sy+i*lh+ey*t;cx.fillText(o.line,xx,yy);if(+sw.value)cx.strokeText(o.line,xx,yy)})}renderBevelFace(cx,layout,sy,lh,sx);cx.restore()}
-async function still(){sync();resize();await loadFont();render(0)}
-function stopPlay(){if(raf)cancelAnimationFrame(raf);raf=0;stop.disabled=true;play.disabled=false}
-async function preview(){stopPlay();revoke();sync();resize();await loadFont();start=performance.now();play.disabled=true;stop.disabled=false;const D=Math.max(100,(+dur.value||5)*1000),lim=ci(loops.value,0,999,0);const tick=n=>{const e=n-start;if(lim&&Math.floor(e/D)>=lim){stopPlay();render(0);return}render(e);raf=requestAnimationFrame(tick)};raf=requestAnimationFrame(tick)}
+function drawText(layout,sy,lh,strokeOnly=false){layout.forEach((o,i)=>strokeOnly?cx.strokeText(o.line,o.x,sy+i*lh):cx.fillText(o.line,o.x,sy+i*lh))}
+function bevelFace(layout,sy,lh,sx){const fs=+size.value,b=+bevel.value/Math.max(.2,sx),str=+bevstr.value/100,strokeW=+sw.value/Math.max(.2,sx);cx.save();if(bevelon.checked&&b>0&&str>0){cx.save();cx.globalAlpha=.14+.14*str;cx.fillStyle=tint(face.value,.5);cx.translate(-b*.12,-b*.12);drawText(layout,sy,lh);cx.restore();cx.save();cx.globalAlpha=.12+.16*str;cx.fillStyle=shade(face.value,.5);cx.translate(b*.14,b*.14);drawText(layout,sy,lh);cx.restore()}const g=cx.createLinearGradient(0,sy-fs,0,sy+(layout.length-1)*lh+fs);g.addColorStop(0,tint(face.value,.28*str+.08));g.addColorStop(.4,tint(face.value,.1*str));g.addColorStop(.6,face.value);g.addColorStop(1,shade(face.value,.22*str+.06));cx.globalAlpha=1;cx.fillStyle=g;drawText(layout,sy,lh);if(bevelon.checked&&b>0&&str>0){cx.save();cx.globalAlpha=.12+.18*str;cx.strokeStyle='#fff';cx.lineWidth=Math.max(1,b*.12);cx.translate(-b*.04,-b*.04);drawText(layout,sy,lh,true);cx.restore();cx.save();cx.globalAlpha=.1+.16*str;cx.strokeStyle='#000';cx.lineWidth=Math.max(1,b*.14);cx.translate(b*.05,b*.05);drawText(layout,sy,lh,true);cx.restore()}if(+sw.value){cx.globalAlpha=1;cx.strokeStyle=stroke.value;cx.lineWidth=strokeW;drawText(layout,sy,lh,true)}cx.restore()}
+function render(ms){const D=Math.max(100,(+dur.value||5)*1000),p=((ms%D)/D+1)%1,S=state(p),fs=+size.value,dep=+depth.value,sl=+slant.value*Math.PI/180,lines=(upper.value==='1'?txt.value.toUpperCase():txt.value).replace(/\r/g,'').split('\n');cx.setTransform(1,0,0,1,0,0);cx.clearRect(0,0,cv.width,cv.height);if(bgmode.value!=='transparent'){cx.fillStyle=bg.value;cx.fillRect(0,0,cv.width,cv.height)}cx.save();cx.translate(cv.width/2+S.x,cv.height/2-S.y);cx.scale(S.sc,S.sc);const sx=Math.max(.18,Math.abs(Math.cos(S.ay))),sk=Math.sin(S.ay)*Math.tan(sl)*.7,ex=Math.cos(S.ay-sl)*dep,ey=Math.sin(S.ax+sl*.3)*dep*.9;cx.transform(1,0,sk,1,0,0);cx.scale(sx,1);cx.font=weight.value+' '+fs+'px "'+font.value+'",sans-serif';cx.textBaseline='middle';cx.lineJoin='round';const lh=fs*1.12,sy=-(lines.length-1)*lh/2,layout=lines.map(line=>{const m=cx.measureText(line).width;return{line,x:align.value==='center'?-m/2:align.value==='left'?-cv.width*.34:cv.width*.34-m}});if(shadow.checked){cx.save();cx.fillStyle='rgba(0,0,0,.25)';cx.shadowColor='rgba(0,0,0,.25)';cx.shadowBlur=20;layout.forEach((o,i)=>cx.fillText(o.line,o.x+18,sy+i*lh+18));cx.restore()}for(let j=Math.max(2,Math.round(dep));j>=1;j--){const t=j/Math.max(2,Math.round(dep));cx.fillStyle=mix(side.value,face.value,t*.18);cx.strokeStyle=shade(stroke.value,.08);cx.lineWidth=+sw.value/Math.max(.2,sx);layout.forEach((o,i)=>{const xx=o.x+ex*t,yy=sy+i*lh+ey*t;cx.fillText(o.line,xx,yy);if(+sw.value)cx.strokeText(o.line,xx,yy)})}bevelFace(layout,sy,lh,sx);cx.restore()}
+async function still(){sync();resize();await loadFont();render(0)}function stopPlay(){if(raf)cancelAnimationFrame(raf);raf=0;stop.disabled=true;play.disabled=false}async function preview(){stopPlay();revoke();sync();resize();await loadFont();start=performance.now();play.disabled=true;stop.disabled=false;const D=Math.max(100,(+dur.value||5)*1000),lim=ci(loops.value,0,999,0);const tick=n=>{const e=n-start;if(lim&&Math.floor(e/D)>=lim){stopPlay();render(0);return}render(e);raf=requestAnimationFrame(tick)};raf=requestAnimationFrame(tick)}
 function mime(alpha){if(!window.MediaRecorder)return'';const a=alpha?['video/webm;codecs=vp9']:['video/webm;codecs=vp9','video/webm;codecs=vp8','video/webm'];return a.find(x=>MediaRecorder.isTypeSupported(x))||''}
-async function exportWebM(){if(busy)return;stopPlay();revoke();sync();resize();await loadFont();const alpha=bgmode.value==='transparent',type=mime(alpha);if(!type){msg(alpha?'Transparent WebM requires VP9 MediaRecorder support.':'WebM recording is not supported in this browser.',true);return}busy=true;[play,exp,reset].forEach(b=>b.disabled=true);prog.style.display='block';prog.value=0;try{const rate=ci(fps.value,1,60,30),seconds=Math.max(1,+dur.value||5),total=Math.max(1,Math.round(rate*seconds)),fd=1000/rate,stream=cv.captureStream(rate),q=cl(+quality.value/100,.1,1),br=Math.round(Math.max(1500000,Math.min(32000000,cv.width*cv.height*rate*.08*q))),chunks=[],rec=new MediaRecorder(stream,{mimeType:type,videoBitsPerSecond:br}),done=new Promise((res,rej)=>{rec.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};rec.onerror=e=>rej(e.error||new Error('Recorder error'));rec.onstop=res});rec.start();for(let i=0;i<total;i++){render(i*fd);prog.value=Math.round((i+1)/total*95);msg((alpha?'Recording transparent VP9 WebM':'Recording WebM')+' — frame '+(i+1)+' of '+total);await new Promise(r=>setTimeout(r,fd))}rec.stop();await done;stream.getTracks().forEach(t=>t.stop());outBlob=new Blob(chunks,{type});outUrl=URL.createObjectURL(outBlob);video.src=outUrl;video.load();result.style.display='block';stats.textContent=cv.width+' × '+cv.height+' • '+rate+' fps • '+seconds.toFixed(2)+' sec • '+bytes(outBlob.size)+(alpha?' • transparent alpha attempt':'');prog.value=100;msg(alpha?'Transparent WebM export completed. Confirm alpha in an alpha aware editor or player.':'WebM exported successfully.')}catch(e){console.error(e);msg(e.message||'Export failed.',true)}finally{busy=false;[play,exp,reset].forEach(b=>b.disabled=false);setTimeout(()=>prog.style.display='none',400)}}
-function revoke(){if(outUrl)URL.revokeObjectURL(outUrl);outUrl='';outBlob=null;video.pause();video.removeAttribute('src');result.style.display='none'}
-function dl(){if(!outUrl)return;const a=document.createElement('a');a.href=outUrl;a.download=(name.value||'3d-font-animation').replace(/\.webm$/i,'')+'.webm';a.click()}
-function defaults(){txt.value="Luke's Tools";font.value='Bebas Neue';weight.value='700';align.value='center';upper.value='0';w.value=1280;h.value=720;bgmode.value='solid';bg.value='#10131a';face.value='#f8f8f8';side.value='#0089a7';stroke.value='#06131a';size.value=170;depth.value=28;slant.value=18;sw.value=3;bevel.value=12;bevstr.value=58;shadow.checked=true;bevelon.checked=true;anim.value='orbit';dur.value=5;fps.value=30;loops.value=0;rot.value=22;lift.value=24;zoom.value=8;quality.value=90;name.value='3d-font-animation';revoke();still();msg('Defaults restored.')}
+async function exportWebM(){if(busy)return;stopPlay();revoke();sync();resize();await loadFont();const alpha=bgmode.value==='transparent',type=mime(alpha);if(!type){msg(alpha?'Transparent WebM requires VP9 MediaRecorder support.':'WebM recording is not supported in this browser.',true);return}busy=true;[play,exp,reset].forEach(b=>b.disabled=true);prog.style.display='block';prog.value=0;try{const rate=ci(fps.value,1,60,30),seconds=Math.max(1,+dur.value||5),total=Math.max(1,Math.round(rate*seconds)),fd=1000/rate,stream=cv.captureStream(rate),q=cl(+quality.value/100,.1,1),br=Math.round(Math.max(1500000,Math.min(32000000,cv.width*cv.height*rate*.08*q))),chunks=[],rec=new MediaRecorder(stream,{mimeType:type,videoBitsPerSecond:br}),done=new Promise((res,rej)=>{rec.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};rec.onerror=e=>rej(e.error||new Error('Recorder error'));rec.onstop=res});rec.start();for(let i=0;i<total;i++){render(i*fd);prog.value=Math.round((i+1)/total*95);msg('Recording frame '+(i+1)+' of '+total+'...');await new Promise(r=>setTimeout(r,fd))}rec.stop();await done;stream.getTracks().forEach(t=>t.stop());outBlob=new Blob(chunks,{type});outUrl=URL.createObjectURL(outBlob);video.src=outUrl;video.load();result.style.display='block';stats.textContent=cv.width+' × '+cv.height+' • '+rate+' fps • '+seconds.toFixed(2)+' sec • '+bytes(outBlob.size)+(alpha?' • transparent alpha attempt':'');prog.value=100;msg('WebM exported successfully.')}catch(e){console.error(e);msg(e.message||'Export failed.',true)}finally{busy=false;[play,exp,reset].forEach(b=>b.disabled=false);setTimeout(()=>prog.style.display='none',400)}}
+function revoke(){if(outUrl)URL.revokeObjectURL(outUrl);outUrl='';outBlob=null;video.pause();video.removeAttribute('src');result.style.display='none'}function dl(){if(!outUrl)return;const a=document.createElement('a');a.href=outUrl;a.download=(name.value||'3d-font-animation').replace(/\.webm$/i,'')+'.webm';a.click()}function defaults(){txt.value="Luke's Tools";font.value='Bebas Neue';weight.value='700';align.value='center';upper.value='0';w.value=1280;h.value=720;bgmode.value='solid';bg.value='#10131a';face.value='#f8f8f8';side.value='#0089a7';stroke.value='#06131a';size.value=170;depth.value=28;slant.value=18;sw.value=3;bevel.value=12;bevstr.value=58;shadow.checked=true;bevelon.checked=true;anim.value='orbit';dur.value=5;fps.value=30;loops.value=0;rot.value=22;lift.value=24;zoom.value=8;quality.value=90;name.value='3d-font-animation';revoke();still();msg('Defaults restored.')}
 [txt,font,weight,align,upper,w,h,bgmode,bg,face,side,stroke,size,depth,slant,sw,bevel,bevstr,shadow,bevelon,anim,dur,fps,loops,rot,lift,zoom,quality].forEach(el=>{el.addEventListener('input',still);el.addEventListener('change',still)});play.onclick=preview;stop.onclick=()=>{stopPlay();still()};exp.onclick=exportWebM;reset.onclick=defaults;download.onclick=dl;window.addEventListener('beforeunload',revoke);sync();still();
-</script>
-</body>
-</html>
+</script></body></html>
