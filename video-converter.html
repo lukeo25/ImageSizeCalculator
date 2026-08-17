@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Video Converter</title>
+<link rel="icon" type="image/png" href="https://raw.githubusercontent.com/lukeo25/LukeAnimate/main/LukeIcon.png">
+<style>
+:root{--b:#e8ecf0;--t:#1a202c;--m:#667281;--a:#00a9c0;--c:#00bcd4;--d:#c85252;--ok:#2c8b57;--sd:#c5ccd6;--sl:#fff}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Arial,Helvetica,sans-serif;background:var(--b);color:var(--t)}
+body{min-height:100vh}
+.app{max-width:1450px;margin:auto;padding:30px}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin-bottom:24px}
+h1{margin:0 0 7px;font-size:42px}.sub{margin:0;color:var(--m);line-height:1.5;max-width:930px}
+.back,.panel,button,.drop{background:var(--b);box-shadow:8px 8px 18px var(--sd),-8px -8px 18px var(--sl)}
+.back{padding:12px 18px;border-radius:16px;color:var(--t);text-decoration:none;font-weight:700;white-space:nowrap}
+.grid{display:grid;grid-template-columns:420px 1fr;gap:24px}.panel{border-radius:22px;padding:20px}.controls{align-self:start}
+.g{margin-bottom:20px}.gt{display:block;color:var(--a);font-weight:700;margin-bottom:10px}.fields{display:grid;grid-template-columns:1fr 1fr;gap:11px}.full{grid-column:1/-1}
+label{font-size:13px;color:var(--m);font-weight:600}input[type=text],input[type=number],select{width:100%;margin-top:5px;padding:11px;border:0;border-radius:12px;background:var(--b);box-shadow:inset 4px 4px 9px var(--sd),inset -4px -4px 9px var(--sl);font:inherit;color:var(--t)}
+input[type=range]{width:100%;accent-color:var(--c)}.sv{display:flex;justify-content:space-between;gap:8px}.check{display:flex;align-items:center;gap:8px;margin-top:11px}.check input{accent-color:var(--c)}
+.drop{border:2px dashed #aab5c2;border-radius:18px;padding:28px 20px;text-align:center;cursor:pointer;transition:.15s}.drop.drag{border-color:var(--c);transform:translateY(-2px)}.drop strong{display:block;font-size:18px;margin-bottom:7px}.drop span{display:block;color:var(--m);font-size:13px;line-height:1.45}.drop input{display:none}
+.filecard{display:none;margin-top:14px;padding:14px;border-radius:14px;background:rgba(0,188,212,.07);border:1px solid rgba(0,169,192,.16)}.filecard.show{display:block}.filename{font-weight:700;word-break:break-all}.filemeta{font-size:13px;color:var(--m);margin-top:5px;line-height:1.4}
+button{border:0;border-radius:13px;padding:12px;font-weight:700;cursor:pointer;color:var(--t)}button:hover:not(:disabled){color:var(--a)}button:disabled{opacity:.45;cursor:not-allowed}.primary{background:linear-gradient(135deg,#00bcd4,#26c6da);color:white!important;box-shadow:0 6px 16px rgba(0,188,212,.3)}.danger{color:var(--d)}.buttons{display:grid;gap:10px}
+.note{padding:10px 12px;border-radius:12px;background:rgba(0,188,212,.07);font-size:12px;color:var(--m);line-height:1.45;margin-top:10px}.note.warn{background:rgba(200,82,82,.07)}
+.progress-wrap{display:none;margin-top:10px}.progress-wrap.show{display:block}progress{width:100%;height:16px;accent-color:var(--c)}.progress-line{display:flex;justify-content:space-between;font-size:12px;color:var(--m);margin-top:5px}
+.status{font-size:13px;color:var(--m);line-height:1.45;min-height:20px}.status.err{color:var(--d)}.status.ok{color:var(--ok)}
+.preview-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.preview-box{min-width:0}.preview-title{font-weight:700;margin:0 0 10px}.video-shell{min-height:300px;border-radius:18px;overflow:hidden;display:grid;place-items:center;background:linear-gradient(45deg,#d7dce2 25%,transparent 25%),linear-gradient(-45deg,#d7dce2 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#d7dce2 75%),linear-gradient(-45deg,transparent 75%,#d7dce2 75%),#eef1f4;background-size:24px 24px;background-position:0 0,0 12px,12px -12px,-12px 0;box-shadow:inset 4px 4px 10px var(--sd),inset -4px -4px 10px var(--sl)}
+video{display:none;width:100%;max-height:520px;background:#111}video.show{display:block}.empty{padding:28px;color:var(--m);text-align:center;line-height:1.5}.result-actions{display:none;margin-top:15px}.result-actions.show{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stats{font-size:13px;color:var(--m);margin-top:10px;line-height:1.45}
+.logbox{margin-top:16px}.loghead{display:flex;align-items:center;justify-content:space-between;gap:10px}.log{height:150px;overflow:auto;white-space:pre-wrap;word-break:break-word;background:#13171d;color:#d4dae2;border-radius:13px;padding:12px;font:12px/1.45 Consolas,Monaco,monospace;display:none}.log.show{display:block}.smallbtn{padding:8px 11px;font-size:12px;box-shadow:4px 4px 9px var(--sd),-4px -4px 9px var(--sl)}
+.badge{display:inline-block;border-radius:999px;padding:4px 9px;background:rgba(0,169,192,.12);color:#007b8e;font-size:12px;font-weight:700;margin-left:6px}
+@media(max-width:1000px){.grid{grid-template-columns:1fr}.preview-grid{grid-template-columns:1fr}.top{flex-direction:column}.back{align-self:stretch;text-align:center}}
+@media(max-width:560px){.app{padding:20px}.fields,.result-actions{grid-template-columns:1fr}.full{grid-column:auto}h1{font-size:34px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <div>
+      <h1>Video Converter</h1>
+      <p class="sub">Convert video directly in your browser. <strong>MOV → MP4</strong> is the primary workflow, with a fast remux option when the existing video and audio codecs are already MP4-compatible.</p>
+    </div>
+    <a class="back" href="index.html">← Luke's Tools</a>
+  </div>
+
+  <div class="grid">
+    <aside class="panel controls">
+      <div class="g">
+        <span class="gt">1. Choose video</span>
+        <label class="drop" id="drop">
+          <input id="file" type="file" accept=".mov,.mp4,.m4v,.avi,.mkv,.webm,.mpg,.mpeg,.wmv,video/*">
+          <strong>Drop a video here or click to choose</strong>
+          <span>MOV, MP4, M4V, AVI, MKV, WebM, MPEG and other FFmpeg-readable video formats.</span>
+        </label>
+        <div id="filecard" class="filecard">
+          <div id="filename" class="filename"></div>
+          <div id="filemeta" class="filemeta"></div>
+        </div>
+        <div class="note">Your video is processed locally in the browser. The FFmpeg engine is downloaded once per page load and is roughly 30 MB. Very large videos can require substantial RAM.</div>
+      </div>
+
+      <div class="g">
+        <span class="gt">2. Output</span>
+        <div class="fields">
+          <label>Format
+            <select id="format">
+              <option value="mp4" selected>MP4 — H.264 + AAC</option>
+              <option value="webm">WebM — VP9 + Opus</option>
+            </select>
+          </label>
+          <label>Conversion mode
+            <select id="mode">
+              <option value="auto" selected>Auto — fast copy first</option>
+              <option value="encode">Compatibility re-encode</option>
+              <option value="copy">Fast remux only</option>
+            </select>
+          </label>
+          <label class="full">Output filename<input id="outname" type="text" value="converted-video.mp4"></label>
+        </div>
+        <div class="note" id="modeNote">Auto first tries to copy the existing streams into MP4 without re-encoding. If that is not compatible, it automatically re-encodes to H.264/AAC.</div>
+      </div>
+
+      <div class="g" id="encodeOptions">
+        <span class="gt">3. Re-encode settings</span>
+        <label><span class="sv"><span>Quality</span><b id="crfv">23 CRF</b></span><input id="crf" type="range" min="17" max="32" value="23"></label>
+        <div class="fields">
+          <label>Maximum width
+            <select id="maxWidth">
+              <option value="0" selected>Keep original</option>
+              <option value="3840">3840 px</option>
+              <option value="2560">2560 px</option>
+              <option value="1920">1920 px</option>
+              <option value="1280">1280 px</option>
+              <option value="854">854 px</option>
+            </select>
+          </label>
+          <label>Frame rate
+            <select id="frameRate">
+              <option value="0" selected>Keep original</option>
+              <option value="60">60 fps</option>
+              <option value="30">30 fps</option>
+              <option value="25">25 fps</option>
+              <option value="24">24 fps</option>
+            </select>
+          </label>
+          <label>Audio bitrate
+            <select id="audioRate">
+              <option value="128k">128 kbps</option>
+              <option value="160k">160 kbps</option>
+              <option value="192k" selected>192 kbps</option>
+              <option value="256k">256 kbps</option>
+              <option value="320k">320 kbps</option>
+            </select>
+          </label>
+          <label>Encoder speed
+            <select id="preset">
+              <option value="ultrafast">Ultra fast</option>
+              <option value="superfast">Super fast</option>
+              <option value="veryfast" selected>Very fast</option>
+              <option value="faster">Faster</option>
+              <option value="fast">Fast</option>
+              <option value="medium">Medium</option>
+            </select>
+          </label>
+        </div>
+        <label class="check"><input id="mute" type="checkbox">Remove audio</label>
+      </div>
+
+      <div class="g buttons">
+        <button id="loadEngine">Load FFmpeg Engine</button>
+        <button id="convert" class="primary" disabled>Convert Video</button>
+        <button id="cancel" class="danger" disabled>Cancel Conversion</button>
+        <div id="progressWrap" class="progress-wrap">
+          <progress id="progress" max="100" value="0"></progress>
+          <div class="progress-line"><span id="progressText">0%</span><span id="timeText"></span></div>
+        </div>
+        <div id="status" class="status">Choose a video to begin.</div>
+      </div>
+    </aside>
+
+    <main class="panel">
+      <div class="preview-grid">
+        <section class="preview-box">
+          <h2 class="preview-title">Original</h2>
+          <div class="video-shell">
+            <video id="inputVideo" controls playsinline></video>
+            <div id="inputEmpty" class="empty">Choose a video to preview it here.<br><span class="badge">MOV preview depends on browser codec support</span></div>
+          </div>
+        </section>
+        <section class="preview-box">
+          <h2 class="preview-title">Converted</h2>
+          <div class="video-shell">
+            <video id="outputVideo" controls playsinline></video>
+            <div id="outputEmpty" class="empty">Your converted video will appear here.</div>
+          </div>
+          <div id="resultActions" class="result-actions">
+            <button id="download" class="primary">Download Converted Video</button>
+            <button id="convertAnother">Convert Another</button>
+          </div>
+          <div id="stats" class="stats"></div>
+        </section>
+      </div>
+
+      <div class="logbox">
+        <div class="loghead">
+          <h3>FFmpeg log</h3>
+          <button id="toggleLog" class="smallbtn">Show Log</button>
+        </div>
+        <div id="log" class="log"></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script type="module">
+import { FFmpeg } from 'https://cdnjs.cloudflare.com/ajax/libs/ffmpeg/0.12.15/esm/index.js';
+
+const $ = id => document.getElementById(id);
+const fileEl=$('file'), drop=$('drop'), filecard=$('filecard'), filename=$('filename'), filemeta=$('filemeta');
+const format=$('format'), mode=$('mode'), outname=$('outname'), modeNote=$('modeNote'), encodeOptions=$('encodeOptions');
+const crf=$('crf'), crfv=$('crfv'), maxWidth=$('maxWidth'), frameRate=$('frameRate'), audioRate=$('audioRate'), preset=$('preset'), mute=$('mute');
+const loadEngine=$('loadEngine'), convert=$('convert'), cancel=$('cancel'), progressWrap=$('progressWrap'), progress=$('progress'), progressText=$('progressText'), timeText=$('timeText'), status=$('status');
+const inputVideo=$('inputVideo'), inputEmpty=$('inputEmpty'), outputVideo=$('outputVideo'), outputEmpty=$('outputEmpty'), resultActions=$('resultActions'), download=$('download'), convertAnother=$('convertAnother'), stats=$('stats');
+const logEl=$('log'), toggleLog=$('toggleLog');
+
+const CORE_BASE = 'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.10/dist/esm';
+const WORKER_BASE = 'https://cdnjs.cloudflare.com/ajax/libs/ffmpeg/0.12.15/esm';
+const TWO_GB = 2 * 1024 * 1024 * 1024;
+
+let sourceFile = null;
+let sourceUrl = '';
+let outputUrl = '';
+let outputBlob = null;
+let ffmpeg = null;
+let engineReady = false;
+let converting = false;
+let workerBlobUrl = '';
+let coreBlobUrl = '';
+let wasmBlobUrl = '';
+let lastLog = '';
+
+function humanBytes(n){
+  if(!Number.isFinite(n)) return '';
+  const u=['B','KB','MB','GB'];
+  let i=0,v=n;
+  while(v>=1024&&i<u.length-1){v/=1024;i++;}
+  return `${v.toFixed(i?2:0)} ${u[i]}`;
+}
+function safeBase(name){
+  return (name || 'converted-video').replace(/\.[^.]+$/, '').replace(/[\\/:*?"<>|]+/g,'-').trim() || 'converted-video';
+}
+function setStatus(text,type=''){
+  status.textContent=text;
+  status.className='status'+(type?` ${type}`:'');
+}
+function revokeUrl(which){
+  if(which==='source'&&sourceUrl){URL.revokeObjectURL(sourceUrl);sourceUrl='';}
+  if(which==='output'&&outputUrl){URL.revokeObjectURL(outputUrl);outputUrl='';outputBlob=null;}
+}
+function updateModeUI(){
+  const fmt=format.value;
+  if(fmt==='webm' && mode.value==='copy') mode.value='encode';
+  encodeOptions.style.opacity=mode.value==='copy'?'0.48':'1';
+  [crf,maxWidth,frameRate,audioRate,preset,mute].forEach(el=>el.disabled=mode.value==='copy');
+  if(fmt==='mp4'){
+    modeNote.textContent = mode.value==='auto'
+      ? 'Auto first tries to copy the existing streams into MP4 without re-encoding. If that is not compatible, it automatically re-encodes to H.264/AAC.'
+      : mode.value==='copy'
+        ? 'Fast remux does not re-encode. It is very fast and lossless, but only works when the source video/audio codecs are already compatible with MP4.'
+        : 'Compatibility mode re-encodes the video to H.264 and audio to AAC for broad MP4 playback support.';
+  }else{
+    modeNote.textContent='WebM output is re-encoded to VP9 video and Opus audio.';
+    if(mode.value!=='encode') mode.value='encode';
+  }
+  const ext=fmt==='webm'?'.webm':'.mp4';
+  outname.value=safeBase(sourceFile?.name || outname.value)+ext;
+}
+function updateQuality(){
+  crfv.textContent=`${crf.value} CRF`;
+}
+function addLog(message){
+  if(!message || message===lastLog) return;
+  lastLog=message;
+  logEl.textContent += message+'\n';
+  if(logEl.textContent.length>50000) logEl.textContent=logEl.textContent.slice(-40000);
+  logEl.scrollTop=logEl.scrollHeight;
+}
+async function toBlobURL(url,mime){
+  const response=await fetch(url,{cache:'force-cache'});
+  if(!response.ok) throw new Error(`Could not download ${url}`);
+  const data=await response.arrayBuffer();
+  return URL.createObjectURL(new Blob([data],{type:mime}));
+}
+async function makeClassWorkerURL(){
+  if(workerBlobUrl) return workerBlobUrl;
+  const response=await fetch(`${WORKER_BASE}/worker.js`,{cache:'force-cache'});
+  if(!response.ok) throw new Error('Could not load the FFmpeg worker.');
+  let code=await response.text();
+  code=code.replaceAll('"./const.js"', `"${WORKER_BASE}/const.js"`)
+           .replaceAll("'./const.js'", `'${WORKER_BASE}/const.js'`)
+           .replaceAll('"./errors.js"', `"${WORKER_BASE}/errors.js"`)
+           .replaceAll("'./errors.js'", `'${WORKER_BASE}/errors.js'`);
+  workerBlobUrl=URL.createObjectURL(new Blob([code],{type:'text/javascript'}));
+  return workerBlobUrl;
+}
+async function ensureEngine(){
+  if(engineReady&&ffmpeg) return;
+  loadEngine.disabled=true;
+  convert.disabled=true;
+  setStatus('Loading FFmpeg engine — first load is about 30 MB...');
+  progressWrap.classList.add('show');
+  progress.value=3;progressText.textContent='Loading engine';timeText.textContent='';
+  try{
+    ffmpeg=new FFmpeg();
+    ffmpeg.on('log',({message})=>addLog(message));
+    ffmpeg.on('progress',({progress:p,time})=>{
+      if(!converting) return;
+      const pct=Math.max(0,Math.min(99,Math.round((Number(p)||0)*100)));
+      progress.value=pct;progressText.textContent=`${pct}%`;
+      if(Number.isFinite(time)&&time>0) timeText.textContent=`processed ${(time/1000000).toFixed(1)} s`;
+    });
+    const [classWorkerURL,cURL,wURL]=await Promise.all([
+      makeClassWorkerURL(),
+      toBlobURL(`${CORE_BASE}/ffmpeg-core.js`,'text/javascript'),
+      toBlobURL(`${CORE_BASE}/ffmpeg-core.wasm`,'application/wasm')
+    ]);
+    coreBlobUrl=cURL;wasmBlobUrl=wURL;
+    await ffmpeg.load({classWorkerURL,coreURL:coreBlobUrl,wasmURL:wasmBlobUrl});
+    engineReady=true;
+    progress.value=100;progressText.textContent='Engine ready';
+    setStatus('FFmpeg engine ready.','ok');
+    loadEngine.textContent='FFmpeg Engine Ready';
+    convert.disabled=!sourceFile;
+  }catch(error){
+    console.error(error);addLog(String(error?.stack||error));
+    setStatus(error.message||'Could not load FFmpeg.','err');
+    progressWrap.classList.remove('show');
+    loadEngine.disabled=false;loadEngine.textContent='Retry Loading FFmpeg';
+    throw error;
+  }
+}
+function showSource(file){
+  sourceFile=file;
+  revokeUrl('source');revokeUrl('output');
+  outputVideo.classList.remove('show');outputVideo.removeAttribute('src');outputEmpty.style.display='block';resultActions.classList.remove('show');stats.textContent='';
+  filename.textContent=file.name;
+  filemeta.textContent=`${humanBytes(file.size)} • ${file.type||'video file'}`;
+  filecard.classList.add('show');
+  sourceUrl=URL.createObjectURL(file);
+  inputVideo.src=sourceUrl;inputVideo.classList.add('show');inputEmpty.style.display='none';
+  inputVideo.load();
+  const ext=format.value==='webm'?'.webm':'.mp4';
+  outname.value=safeBase(file.name)+ext;
+  convert.disabled=!engineReady;
+  if(file.size>=TWO_GB){
+    setStatus('This file is 2 GB or larger. ffmpeg.wasm has a 2 GB input limit, so use desktop FFmpeg for this file.','err');
+    convert.disabled=true;
+  }else{
+    setStatus(engineReady?'Ready to convert.':'Video selected. Load the FFmpeg engine, then convert.');
+  }
+}
+function inputNameFor(file){
+  const m=(file.name||'input.mov').match(/\.[A-Za-z0-9]{1,8}$/);
+  return `input${m?m[0].toLowerCase():'.mov'}`;
+}
+function buildScaleArgs(){
+  const width=Number(maxWidth.value)||0;
+  const filter=width>0
+    ? `scale=trunc(min(${width}\\,iw)/2)*2:-2`
+    : 'scale=trunc(iw/2)*2:trunc(ih/2)*2';
+  return ['-vf',filter];
+}
+function buildEncodeArgs(inputName,outputName){
+  const common=['-i',inputName,'-map','0:v:0?'];
+  if(!mute.checked) common.push('-map','0:a:0?');
+  common.push(...buildScaleArgs());
+  if(Number(frameRate.value)>0) common.push('-r',frameRate.value);
+  if(format.value==='mp4'){
+    common.push('-c:v','libx264','-preset',preset.value,'-crf',crf.value,'-pix_fmt','yuv420p');
+    if(mute.checked) common.push('-an');
+    else common.push('-c:a','aac','-b:a',audioRate.value);
+    common.push('-movflags','+faststart',outputName);
+  }else{
+    const vp9Crf=Math.max(18,Math.min(45,Number(crf.value)+8));
+    common.push('-c:v','libvpx-vp9','-crf',String(vp9Crf),'-b:v','0');
+    if(mute.checked) common.push('-an');
+    else common.push('-c:a','libopus','-b:a',audioRate.value);
+    common.push(outputName);
+  }
+  return common;
+}
+async function cleanVirtualFiles(inputName,outputName){
+  if(!ffmpeg) return;
+  for(const n of [inputName,outputName]){try{await ffmpeg.deleteFile(n);}catch{}}
+}
+async function runConversion(){
+  if(!sourceFile||converting) return;
+  if(sourceFile.size>=TWO_GB){setStatus('This file exceeds the 2 GB ffmpeg.wasm input limit.','err');return;}
+  try{await ensureEngine();}catch{return;}
+  converting=true;convert.disabled=true;cancel.disabled=false;loadEngine.disabled=true;
+  revokeUrl('output');outputVideo.classList.remove('show');outputEmpty.style.display='block';resultActions.classList.remove('show');stats.textContent='';
+  progressWrap.classList.add('show');progress.value=0;progressText.textContent='0%';timeText.textContent='';logEl.textContent='';lastLog='';
+  const inputName=inputNameFor(sourceFile);
+  const ext=format.value==='webm'?'.webm':'.mp4';
+  const outputName=`output${ext}`;
+  const started=performance.now();
+  try{
+    setStatus(`Loading ${sourceFile.name} into FFmpeg memory...`);
+    await cleanVirtualFiles(inputName,outputName);
+    await ffmpeg.writeFile(inputName,new Uint8Array(await sourceFile.arrayBuffer()));
+    let code=1;
+    let usedMode=mode.value;
+    if(format.value==='mp4'&&(mode.value==='auto'||mode.value==='copy')){
+      setStatus('Trying fast MP4 remux without re-encoding...');
+      const copyArgs=['-i',inputName,'-map','0:v:0?','-map','0:a:0?','-c','copy','-movflags','+faststart',outputName];
+      code=await ffmpeg.exec(copyArgs);
+      if(code!==0&&mode.value==='auto'){
+        usedMode='encode';
+        try{await ffmpeg.deleteFile(outputName);}catch{}
+        progress.value=0;progressText.textContent='0%';
+        setStatus('Fast copy is not compatible with this MOV/video. Re-encoding to H.264/AAC...');
+        code=await ffmpeg.exec(buildEncodeArgs(inputName,outputName));
+      }
+    }else{
+      usedMode='encode';
+      setStatus(format.value==='mp4'?'Re-encoding to MP4 (H.264/AAC)...':'Encoding WebM (VP9/Opus)...');
+      code=await ffmpeg.exec(buildEncodeArgs(inputName,outputName));
+    }
+    if(code!==0) throw new Error('FFmpeg could not convert this video. Open the FFmpeg log for codec details.');
+    const data=await ffmpeg.readFile(outputName);
+    const mime=format.value==='webm'?'video/webm':'video/mp4';
+    outputBlob=new Blob([data.buffer],{type:mime});
+    outputUrl=URL.createObjectURL(outputBlob);
+    outputVideo.src=outputUrl;outputVideo.classList.add('show');outputEmpty.style.display='none';outputVideo.load();
+    resultActions.classList.add('show');
+    progress.value=100;progressText.textContent='100%';
+    const elapsed=(performance.now()-started)/1000;
+    const saving=sourceFile.size?((1-outputBlob.size/sourceFile.size)*100):0;
+    stats.textContent=`${humanBytes(sourceFile.size)} → ${humanBytes(outputBlob.size)} • ${elapsed.toFixed(1)} sec • ${usedMode==='copy'?'stream copy / remux':'re-encoded'}${Number.isFinite(saving)?` • ${saving>=0?saving.toFixed(1)+'% smaller':Math.abs(saving).toFixed(1)+'% larger'}`:''}`;
+    setStatus('Conversion complete.','ok');
+    await cleanVirtualFiles(inputName,outputName);
+  }catch(error){
+    console.error(error);addLog(String(error?.stack||error));
+    setStatus(error.message||'Conversion failed.','err');
+  }finally{
+    converting=false;cancel.disabled=true;loadEngine.disabled=engineReady;convert.disabled=!sourceFile||sourceFile.size>=TWO_GB;
+  }
+}
+function cancelConversion(){
+  if(!converting||!ffmpeg) return;
+  ffmpeg.terminate();ffmpeg=null;engineReady=false;converting=false;
+  cancel.disabled=true;loadEngine.disabled=false;loadEngine.textContent='Reload FFmpeg Engine';convert.disabled=true;
+  progressWrap.classList.remove('show');setStatus('Conversion cancelled. Reload the FFmpeg engine to continue.','err');
+}
+function downloadResult(){
+  if(!outputUrl||!outputBlob) return;
+  let wanted=outname.value.trim()||`converted-video.${format.value}`;
+  const ext=format.value==='webm'?'.webm':'.mp4';
+  if(!wanted.toLowerCase().endsWith(ext)) wanted=wanted.replace(/\.[^.]+$/,'')+ext;
+  const a=document.createElement('a');a.href=outputUrl;a.download=wanted;a.click();
+}
+function resetForAnother(){
+  revokeUrl('output');outputVideo.pause();outputVideo.removeAttribute('src');outputVideo.classList.remove('show');outputEmpty.style.display='block';resultActions.classList.remove('show');stats.textContent='';fileEl.value='';sourceFile=null;revokeUrl('source');inputVideo.pause();inputVideo.removeAttribute('src');inputVideo.classList.remove('show');inputEmpty.style.display='block';filecard.classList.remove('show');convert.disabled=true;setStatus('Choose another video.');
+}
+
+fileEl.addEventListener('change',()=>{if(fileEl.files?.[0])showSource(fileEl.files[0]);});
+['dragenter','dragover'].forEach(type=>drop.addEventListener(type,e=>{e.preventDefault();drop.classList.add('drag');}));
+['dragleave','drop'].forEach(type=>drop.addEventListener(type,e=>{e.preventDefault();drop.classList.remove('drag');}));
+drop.addEventListener('drop',e=>{const f=[...(e.dataTransfer?.files||[])].find(x=>x.type.startsWith('video/')||/\.(mov|mp4|m4v|avi|mkv|webm|mpg|mpeg|wmv)$/i.test(x.name));if(f)showSource(f);});
+format.addEventListener('change',updateModeUI);mode.addEventListener('change',updateModeUI);crf.addEventListener('input',updateQuality);
+loadEngine.addEventListener('click',()=>ensureEngine().catch(()=>{}));convert.addEventListener('click',runConversion);cancel.addEventListener('click',cancelConversion);download.addEventListener('click',downloadResult);convertAnother.addEventListener('click',resetForAnother);
+toggleLog.addEventListener('click',()=>{const show=!logEl.classList.contains('show');logEl.classList.toggle('show',show);toggleLog.textContent=show?'Hide Log':'Show Log';});
+window.addEventListener('beforeunload',()=>{revokeUrl('source');revokeUrl('output');[workerBlobUrl,coreBlobUrl,wasmBlobUrl].forEach(u=>u&&URL.revokeObjectURL(u));if(ffmpeg)ffmpeg.terminate();});
+
+updateModeUI();updateQuality();
+</script>
+</body>
+</html>
